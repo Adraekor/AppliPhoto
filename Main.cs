@@ -17,6 +17,7 @@ namespace AppliPhoto
         private PictureBox clone;
         private int indexCloneInMosaic = -1;
         private PictureBox leftArrow, rightArrow;
+        private TextBox tagRender;
 
         private const string tempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -32,7 +33,7 @@ namespace AppliPhoto
 
         private void Main_Load(object sender, EventArgs e)
         {
-            clearTemporaryImages();
+            ClearTemporaryImages();
             DossierImage.CreateFolder();
 
             clone = new PictureBox
@@ -49,24 +50,35 @@ namespace AppliPhoto
             leftArrow.Anchor = AnchorStyles.Left;
             
             leftArrow.MouseClick += new MouseEventHandler(LeftImageButton_Click);
-            leftArrow.Location = new Point(0, (soloImageLayout.Height - leftArrow.Height) / 2);
+            leftArrow.Location = new Point(0, (soloImageLayout.Height - leftArrow.Height) / 4);
 
             rightArrow = new PictureBox
             {
                 Image = new Bitmap(@"asset\right_arrow.png"),
                 SizeMode = PictureBoxSizeMode.Zoom,
-                Anchor = AnchorStyles.Right
+                Anchor = AnchorStyles.Right,
             };
             rightArrow.MouseClick += new MouseEventHandler(RightImageButton_Click);
-            rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 2);
+            rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 4);
+
+            tagRender = new TextBox
+            {
+                Anchor = AnchorStyles.Bottom,
+                Height = soloImageLayout.Height / 5,
+                Width = soloImageLayout.Width,
+                Multiline = true,
+                Location = new Point(0, soloImageLayout.Height / 2),
+            };
 
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
+            //soloImageLayout.Controls.Add(tagRender);
 
             loadAllImportedImageMetadata();
 
-            foreach (var fileName in Directory.EnumerateFiles(localImageDirectory))
+            foreach (var picture in mosaic)
             {
+                var fileName = picture.fileName;
                 if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
                  || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
                  || fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
@@ -76,17 +88,30 @@ namespace AppliPhoto
                 }
             }
 
-            //test();
+            test();
         }
 
         private void test()
         {
             var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
-            modifyTagList(blaise, "prout", eCommentActionType.Add);
-            modifyTagList(blaise, "prout", eCommentActionType.Add);
+            for (int i = 0; i < 10; i++)
+            {
+                string content;
+
+                if (i % 3 == 0)
+                    content = "Salut je suis un tag n°1";
+                else if (i % 3 == 1)
+                    content = "Coucou je suis n°2";
+                else
+                    content = "prout prout";
+
+                Tag c = new Tag(new Button { Text = "X" }, new Label { Text = content });
+                tagPanel.Controls.Add(c);
+            }
+
         }
 
-        private void erasePictureFromApplication(string fileName)
+        private void ErasePictureFromApplication(string fileName)
         {
             mosaicLayout.Controls.Clear();
             mosaic.Remove(mosaic.First(s => s.fileName.Equals(fileName)));
@@ -94,7 +119,7 @@ namespace AppliPhoto
                 SetAndAddPictureToMosaicLayout(picture.fileName);
         }
 
-        private void clearTemporaryImages()
+        private void ClearTemporaryImages()
         {
             if (File.Exists(tempFileName))
                 File.Delete(tempFileName);
@@ -102,7 +127,6 @@ namespace AppliPhoto
 
         public void SetAndAddPictureToMosaicLayout(string fileName)
         {
-
             PictureBox picture = new PictureBox
             {
                 Width = mosaicLayout.Width / 5,
@@ -110,9 +134,6 @@ namespace AppliPhoto
                 SizeMode = PictureBoxSizeMode.Zoom,
                 ImageLocation = fileName
             };
-
-            using (var tempBmp = new Bitmap(fileName))
-                picture.Image = new Bitmap(tempBmp);
 
             picture.MouseClick += new MouseEventHandler(pictureClickEvent);
             mosaicLayout.Controls.Add(picture);
@@ -163,14 +184,15 @@ namespace AppliPhoto
 
         private void pictureClickEvent(object sender, EventArgs e)
         {
-            clone.Image = ((PictureBox)sender).Image;
             var picturePath = ((PictureBox)sender).ImageLocation;
             indexCloneInMosaic = mosaic.IndexOf(mosaic.Find(delegate (ImageData im) { return im.fileName == picturePath; }));
             //var indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
 
+            clone.ImageLocation = picturePath;
             clone.Width = soloImageLayout.Width / 2;
             clone.Height = soloImageLayout.Height / 2;
-            clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, (soloImageLayout.Height - clone.Height) / 2);
+            clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
+            tagRender.Text = string.Join("; ", mosaic[indexCloneInMosaic].tags);
         }
 
         private void loadAllImportedImageMetadata()
