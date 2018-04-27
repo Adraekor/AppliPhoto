@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace ApplicationPhoto
+namespace AppliPhoto
 {
     public class ImageData
     {
-        enum eCommentActionType { Add, Delete }
-
         public string fileName { set; get; }
         public List<string> tags { set; get; }
 
@@ -15,19 +13,22 @@ namespace ApplicationPhoto
             tags = tagList;
         }
 
-        private void ModifyTagList( string tag, eCommentActionType action )
+        public void AddTag( string tag )
         {
-            if( action == eCommentActionType.Add )
-            {
-                if( !tags.Contains( tag ) )
-                    tags.Add( tag );
-            }
-            else
-            {
-                tags.RemoveAll( s => s.Equals( tag ) );
-            }
+            if (!tags.Contains(tag))
+                tags.Add(tag);
         }
 
-        private List<string> readTagsOfPicture() => tags;
+        public void DeleteTag(string tag)
+        {
+            tags.Remove(tag);
+        }
+
+        public void ModifyTagList( string newTag, string oldTag )
+        {
+            tags[ tags.IndexOf( oldTag ) ] = newTag;
+        }
+
+        private List<string> ReadTagsOfPicture() => tags;
     }
 }

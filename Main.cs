@@ -1,8 +1,6 @@
-﻿using ApplicationPhoto;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -17,7 +15,6 @@ namespace AppliPhoto
         private PictureBox clone;
         private int indexCloneInMosaic = -1;
         private PictureBox leftArrow, rightArrow;
-        private TextBox tagRender;
 
         private const string tempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -61,18 +58,8 @@ namespace AppliPhoto
             rightArrow.MouseClick += new MouseEventHandler(RightImageButton_Click);
             rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 4);
 
-            tagRender = new TextBox
-            {
-                Anchor = AnchorStyles.Bottom,
-                Height = soloImageLayout.Height / 5,
-                Width = soloImageLayout.Width,
-                Multiline = true,
-                Location = new Point(0, soloImageLayout.Height / 2),
-            };
-
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
-            //soloImageLayout.Controls.Add(tagRender);
 
             loadAllImportedImageMetadata();
 
@@ -93,7 +80,8 @@ namespace AppliPhoto
 
         private void test()
         {
-            var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
+            //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
+
             for (int i = 0; i < 10; i++)
             {
                 string content;
@@ -105,10 +93,9 @@ namespace AppliPhoto
                 else
                     content = "prout prout";
 
-                Tag c = new Tag(new Button { Text = "X" }, new Label { Text = content });
+                Tag c = new Tag(new Button { Text = "X" }, content, this);
                 tagPanel.Controls.Add(c);
             }
-
         }
 
         private void ErasePictureFromApplication(string fileName)
@@ -139,19 +126,19 @@ namespace AppliPhoto
             mosaicLayout.Controls.Add(picture);
         }
 
-        private void modifyTagList(string fileName, string comment, eCommentActionType action)
+        public void AddTag( string tag )
         {
-            var imageData = mosaic.First(s => s.fileName.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+            mosaic[indexCloneInMosaic].AddTag(tag);
+        }
 
-            if (action == eCommentActionType.Add)
-            {
-                if (!imageData.tags.Any(str => str.Equals(comment)))
-                    imageData.tags.Add(comment);
-            }
-            else
-            {
-                imageData.tags.RemoveAll(s => s.Equals(comment));
-            }
+        public void DeleteTag( string tag )
+        {
+            mosaic[indexCloneInMosaic].DeleteTag(tag);
+        }
+
+        public void Modifytag( string newTag, string oldTag)
+        {
+            mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
         private List<ImageData> seekTagThroughMosaic(List<string> tagsToFind, List<string> tagsToAvoid)
@@ -185,14 +172,13 @@ namespace AppliPhoto
         private void pictureClickEvent(object sender, EventArgs e)
         {
             var picturePath = ((PictureBox)sender).ImageLocation;
-            indexCloneInMosaic = mosaic.IndexOf(mosaic.Find(delegate (ImageData im) { return im.fileName == picturePath; }));
+            indexCloneInMosaic = mosaic.IndexOf(mosaic.Find(delegate (ImageData im) { return im.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase); }));
             //var indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
 
             clone.ImageLocation = picturePath;
             clone.Width = soloImageLayout.Width / 2;
             clone.Height = soloImageLayout.Height / 2;
             clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
-            tagRender.Text = string.Join("; ", mosaic[indexCloneInMosaic].tags);
         }
 
         private void loadAllImportedImageMetadata()

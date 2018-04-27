@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ApplicationPhoto
+namespace AppliPhoto
 {
     class DossierImage
     {
