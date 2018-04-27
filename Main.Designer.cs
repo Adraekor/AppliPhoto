@@ -81,14 +81,14 @@
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
             this.fichierToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.fichierToolStripMenuItem.Text = "Image";
-            this.fichierToolStripMenuItem.Click += new System.EventHandler(this.imageImport);
+            this.fichierToolStripMenuItem.Click += new System.EventHandler(this.ImageImport);
             // 
             // dossierToolStripMenuItem
             // 
             this.dossierToolStripMenuItem.Name = "dossierToolStripMenuItem";
             this.dossierToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.dossierToolStripMenuItem.Text = "Dossier";
-            this.dossierToolStripMenuItem.Click += new System.EventHandler(this.directoryImport);
+            this.dossierToolStripMenuItem.Click += new System.EventHandler(this.DirectoryImport);
             // 
             // SplitScreen
             // 

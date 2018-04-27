@@ -22,7 +22,7 @@ namespace AppliPhoto
 
         public Main()
         {
-            Application.ApplicationExit += new EventHandler(serializeToJSON);
+            Application.ApplicationExit += new EventHandler(SerializeToJSON);
             InitializeComponent();
         }
 
@@ -59,7 +59,7 @@ namespace AppliPhoto
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
 
-            loadAllImportedImageMetadata();
+            LoadAllImportedImageMetadata();
 
             foreach (var picture in mosaic)
             {
@@ -120,7 +120,7 @@ namespace AppliPhoto
                 ImageLocation = fileName
             };
 
-            picture.MouseClick += new MouseEventHandler(pictureClickEvent);
+            picture.MouseClick += new MouseEventHandler(PictureClickEvent);
             mosaicLayout.Controls.Add(picture);
         }
 
@@ -139,7 +139,7 @@ namespace AppliPhoto
             mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
-        private List<ImageData> seekTagThroughMosaic(List<string> tagsToFind, List<string> tagsToAvoid)
+        private List<ImageData> SeekTagThroughMosaic(List<string> tagsToFind, List<string> tagsToAvoid)
         {
             var res = new List<ImageData>();
 
@@ -162,12 +162,7 @@ namespace AppliPhoto
             return res;
         }
 
-        private List<String> readTagsOfPicture(string fileName)
-        {
-            return mosaic.First(imageData => imageData.fileName.Equals(fileName)).tags;
-        }
-
-        private void pictureClickEvent(object sender, EventArgs e)
+        private void PictureClickEvent(object sender, EventArgs e)
         {
             if (indexCloneInMosaic != -1)
             {
@@ -180,7 +175,7 @@ namespace AppliPhoto
             }
 
             var picturePath = ((PictureBox)sender).ImageLocation;
-            indexCloneInMosaic = mosaic.IndexOf(mosaic.Find(delegate (ImageData im) { return im.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase); }));
+            indexCloneInMosaic = mosaic.IndexOf( mosaic.Find( delegate ( ImageData im ) { return im.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ); } ) );
             //var indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
 
             clone.ImageLocation = picturePath;
@@ -188,17 +183,17 @@ namespace AppliPhoto
             clone.Height = 3 * soloImageLayout.Height / 4;
             clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
 
-            loadPictureTags();
+            LoadPictureTags();
         }
 
-        private void loadPictureTags()
+        private void LoadPictureTags()
         {
             tagPanel.Controls.Clear();
             foreach (var tag in mosaic[indexCloneInMosaic].tags)
                 tagPanel.Controls.Add(new Tag(tag, this));
         }
 
-        private void loadAllImportedImageMetadata()
+        private void LoadAllImportedImageMetadata()
         {
             if (File.Exists(metadataStore))
             {
@@ -226,7 +221,7 @@ namespace AppliPhoto
                 indexCloneInMosaic -= 1;
 
             clone.ImageLocation = mosaic[indexCloneInMosaic].fileName;
-            loadPictureTags();
+            LoadPictureTags();
         }
 
         private void RightImageButton_Click(object sender, EventArgs e)
@@ -239,10 +234,10 @@ namespace AppliPhoto
                 indexCloneInMosaic += 1;
 
             clone.ImageLocation = mosaic[indexCloneInMosaic].fileName;
-            loadPictureTags();
+            LoadPictureTags();
         }
 
-        private void imageImport(object sender, EventArgs e)
+        private void ImageImport(object sender, EventArgs e)
         {
             using (var FileSelector = new OpenFileDialog
             {
@@ -268,7 +263,7 @@ namespace AppliPhoto
             }
         }
 
-        private void directoryImport(object sender, EventArgs e)
+        private void DirectoryImport(object sender, EventArgs e)
         {
             using (var browserSelector = new FolderBrowserDialog())
             {
@@ -300,7 +295,7 @@ namespace AppliPhoto
             }
         }
 
-        private void serializeToJSON(object sender, EventArgs e)
+        private void SerializeToJSON(object sender, EventArgs e)
         {
             using (var file = File.CreateText(metadataStore))
             {
