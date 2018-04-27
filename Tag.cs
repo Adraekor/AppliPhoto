@@ -8,28 +8,35 @@ namespace AppliPhoto
     {
         private Main mMain;
         private Button mButton;
-        private TextBox mTextBox;
+        public TextBox mTextBox;
+        private string mOldTag;
 
-        public Tag(Button button, string tag, Main main)
+        public Tag( string iTag, Main iMain )
         {
-            mMain = main;
+            mMain = iMain;
             mTextBox = new TextBox
             {
-                Font = new Font("Times", 12, FontStyle.Italic),
-                BackColor = Label.DefaultBackColor,
-                Text = tag,
-                BorderStyle = BorderStyle.None
+                Font = new Font("Arial", 12, FontStyle.Italic),
+                BackColor = DefaultBackColor,
+                Text = iTag,
+                BorderStyle = BorderStyle.None,
             };
-
-            mTextBox.Validating += MTextBox_Validating;
 
             Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
             mTextBox.Width = size.Width;
             mTextBox.Height = size.Height;
+
+            mTextBox.GotFocus += StoreOldTag;
+            mTextBox.Validating += TextValidating;
+            
             mTextBox.KeyDown += tagModification;
+            
             Controls.Add(mTextBox);
 
-            mButton = button;
+            mButton = new Button
+            {
+                Text = "X",
+            };
             Height = Math.Max(mButton.Height, mTextBox.Height);
             Width = mButton.Width + mTextBox.Width + 10;
             
@@ -41,13 +48,26 @@ namespace AppliPhoto
             mButton.Height = mTextBox.Height;
         }
 
-        private void MTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void StoreOldTag(object sender, EventArgs e)
         {
-            //MessageBox.Show(mTextBox.Text);
+            mOldTag = mTextBox.Text;
+        }
+
+        private void TextValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            mTextBox.Font = new Font("Arial", 12, FontStyle.Italic);
+            Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
+            mTextBox.Width = size.Width;
+            mButton.Location = new Point(mTextBox.Width, 0);
+
+            if (mTextBox.Text.Trim() != "")
+                mMain.Modifytag(mTextBox.Text.Trim(), mOldTag);
         }
 
         private void tagModification(object sender, KeyEventArgs e)
         {
+            if(mTextBox.Font.Italic)
+                mTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
             Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
             mTextBox.Width = size.Width;
             mButton.Location = new Point(mTextBox.Width, 0);

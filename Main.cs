@@ -20,8 +20,6 @@ namespace AppliPhoto
         private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
         private const string metadataStore = @"c:\monApplicationPhoto\Images\metadata.json";
 
-        enum eCommentActionType { Add, Delete }
-
         public Main()
         {
             Application.ApplicationExit += new EventHandler(serializeToJSON);
@@ -75,7 +73,7 @@ namespace AppliPhoto
                 }
             }
 
-            test();
+            //test();
         }
 
         private void test()
@@ -93,7 +91,7 @@ namespace AppliPhoto
                 else
                     content = "prout prout";
 
-                Tag c = new Tag(new Button { Text = "X" }, content, this);
+                Tag c = new Tag( content, this );
                 tagPanel.Controls.Add(c);
             }
         }
@@ -171,14 +169,33 @@ namespace AppliPhoto
 
         private void pictureClickEvent(object sender, EventArgs e)
         {
+            if (indexCloneInMosaic != -1)
+            {
+                mosaic[indexCloneInMosaic].tags.Clear();
+                foreach (Tag tag in tagPanel.Controls)
+                {
+                    if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text))
+                        mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text);
+                }
+            }
+
             var picturePath = ((PictureBox)sender).ImageLocation;
             indexCloneInMosaic = mosaic.IndexOf(mosaic.Find(delegate (ImageData im) { return im.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase); }));
             //var indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
 
             clone.ImageLocation = picturePath;
             clone.Width = soloImageLayout.Width / 2;
-            clone.Height = soloImageLayout.Height / 2;
+            clone.Height = 3 * soloImageLayout.Height / 4;
             clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
+
+            loadPictureTags();
+        }
+
+        private void loadPictureTags()
+        {
+            tagPanel.Controls.Clear();
+            foreach (var tag in mosaic[indexCloneInMosaic].tags)
+                tagPanel.Controls.Add(new Tag(tag, this));
         }
 
         private void loadAllImportedImageMetadata()
@@ -209,7 +226,7 @@ namespace AppliPhoto
                 indexCloneInMosaic -= 1;
 
             clone.ImageLocation = mosaic[indexCloneInMosaic].fileName;
-
+            loadPictureTags();
         }
 
         private void RightImageButton_Click(object sender, EventArgs e)
@@ -222,6 +239,7 @@ namespace AppliPhoto
                 indexCloneInMosaic += 1;
 
             clone.ImageLocation = mosaic[indexCloneInMosaic].fileName;
+            loadPictureTags();
         }
 
         private void imageImport(object sender, EventArgs e)
