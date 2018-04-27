@@ -37,6 +37,7 @@ namespace AppliPhoto
             {
                 Text = "X",
             };
+
             Height = Math.Max(mButton.Height, mTextBox.Height);
             Width = mButton.Width + mTextBox.Width + 10;
             
@@ -75,7 +76,6 @@ namespace AppliPhoto
 
         private void buttonClicked(object sender, EventArgs e)
         {
-            mMain.DeleteTag(mTextBox.Text);
             Dispose();
         }
     }

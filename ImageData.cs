@@ -15,20 +15,19 @@ namespace AppliPhoto
 
         public void AddTag( string tag )
         {
+            tag = tag.Trim();
             if (!tags.Contains(tag))
                 tags.Add(tag);
         }
 
         public void DeleteTag(string tag)
         {
-            tags.Remove(tag);
+            tags.Remove(tag.Trim());
         }
 
         public void ModifyTagList( string newTag, string oldTag )
         {
-            tags[ tags.IndexOf( oldTag ) ] = newTag;
+            tags[ tags.IndexOf( oldTag.Trim() ) ] = newTag.Trim();
         }
-
-        private List<string> ReadTagsOfPicture() => tags;
     }
 }

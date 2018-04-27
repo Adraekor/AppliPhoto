@@ -15,6 +15,7 @@ namespace AppliPhoto
         private PictureBox clone;
         private int indexCloneInMosaic = -1;
         private PictureBox leftArrow, rightArrow;
+        private Button AddTagToPicture;
 
         private const string tempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -30,6 +31,14 @@ namespace AppliPhoto
         {
             ClearTemporaryImages();
             DossierImage.CreateFolder();
+
+            AddTagToPicture = new Button
+            {
+                Text = "+",
+                Width = 20,
+                Height = 20
+            };
+            AddTagToPicture.Click += ButtonAddTag;
 
             clone = new PictureBox
             {
@@ -74,6 +83,15 @@ namespace AppliPhoto
             }
 
             //test();
+        }
+
+        private void ButtonAddTag(object sender, EventArgs e)
+        {
+            string promptValue = Prompt.ShowDialog("Test", "123");
+            var c = new Tag(promptValue, this);
+            tagPanel.Controls.Remove(AddTagToPicture);
+            tagPanel.Controls.Add(c);
+            tagPanel.Controls.Add(AddTagToPicture);
         }
 
         private void test()
@@ -129,11 +147,6 @@ namespace AppliPhoto
             mosaic[indexCloneInMosaic].AddTag(tag);
         }
 
-        public void DeleteTag( string tag )
-        {
-            mosaic[indexCloneInMosaic].DeleteTag(tag);
-        }
-
         public void Modifytag( string newTag, string oldTag)
         {
             mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
@@ -164,19 +177,10 @@ namespace AppliPhoto
 
         private void PictureClickEvent(object sender, EventArgs e)
         {
-            if (indexCloneInMosaic != -1)
-            {
-                mosaic[indexCloneInMosaic].tags.Clear();
-                foreach (Tag tag in tagPanel.Controls)
-                {
-                    if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text))
-                        mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text);
-                }
-            }
+            UpdateTags();
 
             var picturePath = ((PictureBox)sender).ImageLocation;
-            indexCloneInMosaic = mosaic.IndexOf( mosaic.Find( delegate ( ImageData im ) { return im.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ); } ) );
-            //var indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
+            indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
 
             clone.ImageLocation = picturePath;
             clone.Width = soloImageLayout.Width / 2;
@@ -189,8 +193,10 @@ namespace AppliPhoto
         private void LoadPictureTags()
         {
             tagPanel.Controls.Clear();
-            foreach (var tag in mosaic[indexCloneInMosaic].tags)
-                tagPanel.Controls.Add(new Tag(tag, this));
+            foreach ( var tag in mosaic[ indexCloneInMosaic ].tags )
+                tagPanel.Controls.Add( new Tag( tag, this ) );
+
+            tagPanel.Controls.Add(AddTagToPicture);
         }
 
         private void LoadAllImportedImageMetadata()
@@ -205,14 +211,26 @@ namespace AppliPhoto
                 if (mosaic == null)
                     mosaic = new List<ImageData>();
             }
-            else
-            {
+        }
 
+        private void UpdateTags()
+        {
+            if (indexCloneInMosaic != -1)
+            {
+                mosaic[indexCloneInMosaic].tags.Clear();
+                for(int i = 0; i < tagPanel.Controls.Count - 1; ++i)
+                {
+                    Tag tag = (Tag) tagPanel.Controls[i];
+                    if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text))
+                        mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text);
+                }
             }
         }
 
         private void LeftImageButton_Click(object sender, EventArgs e)
         {
+            UpdateTags();
+
             if (indexCloneInMosaic == -1)
                 return;
             if (indexCloneInMosaic == 0)
@@ -226,6 +244,8 @@ namespace AppliPhoto
 
         private void RightImageButton_Click(object sender, EventArgs e)
         {
+            UpdateTags();
+
             if (indexCloneInMosaic == -1)
                 return;
             if (indexCloneInMosaic == mosaic.Count - 1)

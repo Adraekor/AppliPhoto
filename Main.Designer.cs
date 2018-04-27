@@ -37,10 +37,11 @@
             this.dossierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SplitScreen = new System.Windows.Forms.TableLayoutPanel();
             this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.soloImageLayout = new System.Windows.Forms.Panel();
             this.tagPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -115,11 +116,6 @@
             this.mosaicLayout.Size = new System.Drawing.Size(675, 710);
             this.mosaicLayout.TabIndex = 0;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
@@ -151,6 +147,16 @@
             this.tagPanel.Name = "tagPanel";
             this.tagPanel.Size = new System.Drawing.Size(669, 349);
             this.tagPanel.TabIndex = 1;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(61, 4);
             // 
             // Main
             // 
@@ -184,5 +190,6 @@
         private System.Windows.Forms.Panel soloImageLayout;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.FlowLayoutPanel tagPanel;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
     }
 }
