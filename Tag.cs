@@ -28,8 +28,7 @@ namespace AppliPhoto
 
             mTextBox.GotFocus += StoreOldTag;
             mTextBox.Validating += TextValidating;
-            
-            mTextBox.KeyDown += tagModification;
+            mTextBox.KeyDown += TagModification;
             
             Controls.Add(mTextBox);
 
@@ -44,7 +43,7 @@ namespace AppliPhoto
             Controls.Add(mButton);
             mButton.Location = new Point(mTextBox.Width, 0);
             AutoSize = true;
-            mButton.Click += buttonClicked;
+            mButton.Click += DeleteButtonClick;
             mButton.Width = mTextBox.Height;
             mButton.Height = mTextBox.Height;
         }
@@ -56,25 +55,30 @@ namespace AppliPhoto
 
         private void TextValidating(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (mTextBox.Text.Trim() == "")
+                mTextBox.Text = mOldTag;
+
             mTextBox.Font = new Font("Arial", 12, FontStyle.Italic);
             Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
             mTextBox.Width = size.Width;
             mButton.Location = new Point(mTextBox.Width, 0);
-
-            if (mTextBox.Text.Trim() != "")
-                mMain.Modifytag(mTextBox.Text.Trim(), mOldTag);
         }
 
-        private void tagModification(object sender, KeyEventArgs e)
+        private void TagModification(object sender, KeyEventArgs e)
         {
             if(mTextBox.Font.Italic)
                 mTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
             Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
             mTextBox.Width = size.Width;
             mButton.Location = new Point(mTextBox.Width, 0);
+
+            if( e.KeyCode == Keys.Enter )
+            {
+                TextValidating(null, null);
+            }
         }
 
-        private void buttonClicked(object sender, EventArgs e)
+        private void DeleteButtonClick(object sender, EventArgs e)
         {
             Dispose();
         }

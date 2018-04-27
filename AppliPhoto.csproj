@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Prompt.cs" />
     <Compile Include="DossierImage.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

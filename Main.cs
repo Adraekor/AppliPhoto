@@ -16,6 +16,8 @@ namespace AppliPhoto
         private int indexCloneInMosaic = -1;
         private PictureBox leftArrow, rightArrow;
         private Button AddTagToPicture;
+        public string currentlyModifiedTag;
+        public string currentlyModifiedTagOldValue;
 
         private const string tempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -29,6 +31,8 @@ namespace AppliPhoto
 
         private void Main_Load(object sender, EventArgs e)
         {
+            LoadAllImportedImageMetadata();
+
             ClearTemporaryImages();
             DossierImage.CreateFolder();
 
@@ -68,7 +72,6 @@ namespace AppliPhoto
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
 
-            LoadAllImportedImageMetadata();
 
             foreach (var picture in mosaic)
             {
@@ -87,11 +90,14 @@ namespace AppliPhoto
 
         private void ButtonAddTag(object sender, EventArgs e)
         {
-            string promptValue = Prompt.ShowDialog("Test", "123");
-            var c = new Tag(promptValue, this);
-            tagPanel.Controls.Remove(AddTagToPicture);
-            tagPanel.Controls.Add(c);
-            tagPanel.Controls.Add(AddTagToPicture);
+            string promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
+            if (promptValue.Trim() != "")
+            {
+                var c = new Tag(promptValue, this);
+                tagPanel.Controls.Remove(AddTagToPicture);
+                tagPanel.Controls.Add(c);
+                tagPanel.Controls.Add(AddTagToPicture);
+            }
         }
 
         private void test()
@@ -140,16 +146,6 @@ namespace AppliPhoto
 
             picture.MouseClick += new MouseEventHandler(PictureClickEvent);
             mosaicLayout.Controls.Add(picture);
-        }
-
-        public void AddTag( string tag )
-        {
-            mosaic[indexCloneInMosaic].AddTag(tag);
-        }
-
-        public void Modifytag( string newTag, string oldTag)
-        {
-            mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
         private List<ImageData> SeekTagThroughMosaic(List<string> tagsToFind, List<string> tagsToAvoid)
@@ -221,8 +217,8 @@ namespace AppliPhoto
                 for(int i = 0; i < tagPanel.Controls.Count - 1; ++i)
                 {
                     Tag tag = (Tag) tagPanel.Controls[i];
-                    if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text))
-                        mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text);
+                    if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text.Trim()))
+                        mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text.Trim());
                 }
             }
         }
