@@ -14,10 +14,10 @@ namespace AppliPhoto
         private List<ImageData> mMosaic = new List<ImageData>();
         private PictureBox mClone;
         private PictureBox mImageToBeDeleted;
-        private PictureBox mSelectedPicture;
+        private PictureBox mLastSelectedPicture;
         private int mIndexCloneInMosaic = -1;
         private Button mAddTagToPicture;
-        private List<PictureBox> mSelectedItems;
+        private List<PictureBox> mSelectedItems = new List<PictureBox>();
 
         private const string kmTempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string kmLocalImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -31,7 +31,8 @@ namespace AppliPhoto
 
         private void Main_Load(object sender, EventArgs e)
         {
-            mSelectedPicture = new PictureBox();
+            mLastSelectedPicture = new PictureBox();
+
             LoadAllImportedImageMetadata();
 
             ClearTemporaryImages();
@@ -73,7 +74,6 @@ namespace AppliPhoto
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
 
-
             foreach (var picture in mMosaic)
             {
                 var fileName = picture.fileName;
@@ -88,10 +88,10 @@ namespace AppliPhoto
 
             //test();
         }
+
         private void test()
         {
             //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
-
         }
 
         public void ModifyTag( string newTag, string oldTag )
@@ -150,7 +150,7 @@ namespace AppliPhoto
                 ImageLocation = fileName
             };
 
-            picture.MouseClick += new MouseEventHandler(PictureClickEvent);
+            picture.MouseClick += new MouseEventHandler(PictureClick);
             mosaicLayout.Controls.Add(picture);
         }
 
@@ -177,27 +177,40 @@ namespace AppliPhoto
             return res;
         }
 
-        private void PictureClickEvent(object sender, MouseEventArgs e)
+        private void PictureClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                UpdateTags();
-
                 var currentPicture = ((PictureBox)sender);
-
-                mSelectedPicture.BorderStyle = BorderStyle.None;
-                mSelectedPicture = currentPicture;
-
                 var picturePath = currentPicture.ImageLocation;
                 currentPicture.BorderStyle = BorderStyle.FixedSingle;
-                mIndexCloneInMosaic = mMosaic.IndexOf(mMosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
 
-                mClone.ImageLocation = picturePath;
-                mClone.Width = soloImageLayout.Width / 2;
-                mClone.Height = 3 * soloImageLayout.Height / 4;
-                mClone.Location = new Point((soloImageLayout.Width - mClone.Width) / 2, 0);
+                if (ModifierKeys == Keys.Control)
+                {
+                    mSelectedItems.Add(currentPicture);
+                    mLastSelectedPicture = currentPicture;
+                    tagPanel.Controls.Clear();
+                }
+                else
+                {
+                    UpdateTags();
+                    mIndexCloneInMosaic = mMosaic.IndexOf(mMosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
+                    foreach ( var i in mSelectedItems )
+                    {
+                        i.BorderStyle = BorderStyle.None;
+                    }
+                    mSelectedItems.Clear();
+                    mLastSelectedPicture.BorderStyle = BorderStyle.None;
+                    mLastSelectedPicture = currentPicture;
+                    mSelectedItems.Add(currentPicture);
+                    currentPicture.BorderStyle = BorderStyle.FixedSingle;
 
-                LoadPictureTags();
+                    LoadPictureTags();
+                    mClone.ImageLocation = picturePath;
+                    mClone.Width = soloImageLayout.Width / 2;
+                    mClone.Height = 3 * soloImageLayout.Height / 4;
+                    mClone.Location = new Point((soloImageLayout.Width - mClone.Width) / 2, 0);
+                }
             }
             else if (e.Button == MouseButtons.Right)
             {
