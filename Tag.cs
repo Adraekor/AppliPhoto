@@ -62,6 +62,8 @@ namespace AppliPhoto
             Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
             mTextBox.Width = size.Width;
             mButton.Location = new Point(mTextBox.Width, 0);
+
+            mMain.ModifyTag(mTextBox.Text, mOldTag);
         }
 
         private void TagModification(object sender, KeyEventArgs e)

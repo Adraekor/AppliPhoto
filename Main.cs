@@ -88,6 +88,11 @@ namespace AppliPhoto
             //test();
         }
 
+        public void ModifyTag( string newTag, string oldTag )
+        {
+            mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
+        }
+
         private void ButtonAddTag(object sender, EventArgs e)
         {
             string promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
