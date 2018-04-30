@@ -36,12 +36,12 @@
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dossierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SplitScreen = new System.Windows.Forms.TableLayoutPanel();
-            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.soloImageLayout = new System.Windows.Forms.Panel();
             this.tagPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -74,20 +74,20 @@
             this.fichierToolStripMenuItem,
             this.dossierToolStripMenuItem});
             this.importerToolStripMenuItem.Name = "importerToolStripMenuItem";
-            this.importerToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.importerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.importerToolStripMenuItem.Text = "Importer";
             // 
             // fichierToolStripMenuItem
             // 
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
-            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.fichierToolStripMenuItem.Text = "Image";
             this.fichierToolStripMenuItem.Click += new System.EventHandler(this.ImageImport);
             // 
             // dossierToolStripMenuItem
             // 
             this.dossierToolStripMenuItem.Name = "dossierToolStripMenuItem";
-            this.dossierToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.dossierToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dossierToolStripMenuItem.Text = "Dossier";
             this.dossierToolStripMenuItem.Click += new System.EventHandler(this.DirectoryImport);
             // 
@@ -105,16 +105,6 @@
             this.SplitScreen.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SplitScreen.Size = new System.Drawing.Size(1362, 716);
             this.SplitScreen.TabIndex = 1;
-            // 
-            // mosaicLayout
-            // 
-            this.mosaicLayout.AutoScroll = true;
-            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
-            this.mosaicLayout.Name = "mosaicLayout";
-            this.mosaicLayout.Size = new System.Drawing.Size(675, 710);
-            this.mosaicLayout.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
@@ -158,6 +148,16 @@
             this.contextMenuStrip2.Name = "contextMenuStrip2";
             this.contextMenuStrip2.Size = new System.Drawing.Size(61, 4);
             // 
+            // mosaicLayout
+            // 
+            this.mosaicLayout.AutoScroll = true;
+            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
+            this.mosaicLayout.Name = "mosaicLayout";
+            this.mosaicLayout.Size = new System.Drawing.Size(675, 710);
+            this.mosaicLayout.TabIndex = 0;
+            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -185,11 +185,11 @@
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dossierToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel SplitScreen;
-        private System.Windows.Forms.FlowLayoutPanel mosaicLayout;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel soloImageLayout;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.FlowLayoutPanel tagPanel;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.FlowLayoutPanel mosaicLayout;
     }
 }

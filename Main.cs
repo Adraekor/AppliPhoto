@@ -11,15 +11,17 @@ namespace AppliPhoto
 {
     public partial class Main : Form
     {
-        private List<ImageData> mosaic = new List<ImageData>();
-        private PictureBox clone;
-        private PictureBox ImageToBeDeleted;
-        private int indexCloneInMosaic = -1;
-        private Button AddTagToPicture;
+        private List<ImageData> mMosaic = new List<ImageData>();
+        private PictureBox mClone;
+        private PictureBox mImageToBeDeleted;
+        private PictureBox mSelectedPicture;
+        private int mIndexCloneInMosaic = -1;
+        private Button mAddTagToPicture;
+        private List<PictureBox> mSelectedItems;
 
-        private const string tempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
-        private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
-        private const string metadataStore = @"c:\monApplicationPhoto\Images\metadata.json";
+        private const string kmTempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
+        private const string kmLocalImageDirectory = @"c:\monApplicationPhoto\Images\";
+        private const string kmMetadataStore = @"c:\monApplicationPhoto\Images\metadata.json";
 
         public Main()
         {
@@ -29,25 +31,26 @@ namespace AppliPhoto
 
         private void Main_Load(object sender, EventArgs e)
         {
+            mSelectedPicture = new PictureBox();
             LoadAllImportedImageMetadata();
 
             ClearTemporaryImages();
             DossierImage.CreateFolder();
 
-            AddTagToPicture = new Button
+            mAddTagToPicture = new Button
             {
                 Text = "+",
                 Width = 20,
                 Height = 20
             };
-            AddTagToPicture.Click += AddTagButton;
+            mAddTagToPicture.Click += AddTagButton;
 
-            clone = new PictureBox
+            mClone = new PictureBox
             {
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Anchor = AnchorStyles.None
             };
-            soloImageLayout.Controls.Add(clone);
+            soloImageLayout.Controls.Add(mClone);
 
             var leftArrow = new PictureBox
             {
@@ -71,7 +74,7 @@ namespace AppliPhoto
             soloImageLayout.Controls.Add(rightArrow);
 
 
-            foreach (var picture in mosaic)
+            foreach (var picture in mMosaic)
             {
                 var fileName = picture.fileName;
                 if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
@@ -93,17 +96,17 @@ namespace AppliPhoto
 
         public void ModifyTag( string newTag, string oldTag )
         {
-            mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
+            mMosaic[mIndexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
         public void DeleteTag(string tag)
         {
-            mosaic[indexCloneInMosaic].DeleteTag(tag);
+            mMosaic[mIndexCloneInMosaic].DeleteTag(tag);
         }
 
         public void AddTag(string tag)
         {
-            mosaic[indexCloneInMosaic].AddTag(tag);
+            mMosaic[mIndexCloneInMosaic].AddTag(tag);
         }
 
         private void AddTagButton(object sender, EventArgs e)
@@ -111,19 +114,19 @@ namespace AppliPhoto
             var promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
             if (promptValue.Trim() != "")
             {
-                mosaic[indexCloneInMosaic].AddTag(promptValue);
+                mMosaic[mIndexCloneInMosaic].AddTag(promptValue);
                 var c = new Tag(promptValue, this);
-                tagPanel.Controls.Remove(AddTagToPicture);
+                tagPanel.Controls.Remove(mAddTagToPicture);
                 tagPanel.Controls.Add(c);
-                tagPanel.Controls.Add(AddTagToPicture);
+                tagPanel.Controls.Add(mAddTagToPicture);
             }
         }
 
         private void ErasePictureFromApplication()
         {
-            var fileName = ImageToBeDeleted.ImageLocation;
-            ImageToBeDeleted.Dispose();
-            mosaic.Remove(mosaic.First(s => s.fileName.Equals(fileName)));
+            var fileName = mImageToBeDeleted.ImageLocation;
+            mImageToBeDeleted.Dispose();
+            mMosaic.Remove(mMosaic.First(s => s.fileName.Equals(fileName)));
         }
 
         private void ShowRightClickMenu()
@@ -133,8 +136,8 @@ namespace AppliPhoto
 
         private void ClearTemporaryImages()
         {
-            if (File.Exists(tempFileName))
-                File.Delete(tempFileName);
+            if (File.Exists(kmTempFileName))
+                File.Delete(kmTempFileName);
         }
 
         public void SetAndAddPictureToMosaicLayout(string fileName)
@@ -157,7 +160,7 @@ namespace AppliPhoto
 
             foreach (var tagName in tagsToFind)
             {
-                res = mosaic.Where(p => p.tags.Any(tag => tag.Equals(tagName))).ToList();
+                res = mMosaic.Where(p => p.tags.Any(tag => tag.Equals(tagName))).ToList();
             }
 
             foreach (var r in res)
@@ -180,19 +183,25 @@ namespace AppliPhoto
             {
                 UpdateTags();
 
-                var picturePath = ((PictureBox)sender).ImageLocation;
-                indexCloneInMosaic = mosaic.IndexOf(mosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
+                var currentPicture = ((PictureBox)sender);
 
-                clone.ImageLocation = picturePath;
-                clone.Width = soloImageLayout.Width / 2;
-                clone.Height = 3 * soloImageLayout.Height / 4;
-                clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
+                mSelectedPicture.BorderStyle = BorderStyle.None;
+                mSelectedPicture = currentPicture;
+
+                var picturePath = currentPicture.ImageLocation;
+                currentPicture.BorderStyle = BorderStyle.FixedSingle;
+                mIndexCloneInMosaic = mMosaic.IndexOf(mMosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
+
+                mClone.ImageLocation = picturePath;
+                mClone.Width = soloImageLayout.Width / 2;
+                mClone.Height = 3 * soloImageLayout.Height / 4;
+                mClone.Location = new Point((soloImageLayout.Width - mClone.Width) / 2, 0);
 
                 LoadPictureTags();
             }
             else if (e.Button == MouseButtons.Right)
             {
-                ImageToBeDeleted = (PictureBox)sender;
+                mImageToBeDeleted = (PictureBox)sender;
                 ShowRightClickMenu();
             }
         }
@@ -200,36 +209,36 @@ namespace AppliPhoto
         private void LoadPictureTags()
         {
             tagPanel.Controls.Clear();
-            foreach ( var tag in mosaic[ indexCloneInMosaic ].tags )
+            foreach ( var tag in mMosaic[ mIndexCloneInMosaic ].tags )
                 tagPanel.Controls.Add( new Tag( tag, this ) );
 
-            tagPanel.Controls.Add(AddTagToPicture);
+            tagPanel.Controls.Add(mAddTagToPicture);
         }
 
         private void LoadAllImportedImageMetadata()
         {
-            if (File.Exists(metadataStore))
+            if (File.Exists(kmMetadataStore))
             {
-                using (var file = File.OpenText(metadataStore))
+                using (var file = File.OpenText(kmMetadataStore))
                 {
                     var serializer = new JsonSerializer();
-                    mosaic = (List<ImageData>)serializer.Deserialize(file, typeof(List<ImageData>));
+                    mMosaic = (List<ImageData>)serializer.Deserialize(file, typeof(List<ImageData>));
                 }
             }
-            if (mosaic == null)
-                mosaic = new List<ImageData>();
+            if (mMosaic == null)
+                mMosaic = new List<ImageData>();
         }
 
         private void UpdateTags()
         {
-            if (indexCloneInMosaic != -1)
+            if (mIndexCloneInMosaic != -1)
             {
-                mosaic[indexCloneInMosaic].tags.Clear();
+                mMosaic[mIndexCloneInMosaic].tags.Clear();
                 for( var i = 0; i < tagPanel.Controls.Count - 1; ++i )
                 {
                     var tag = (Tag) tagPanel.Controls[i];
-                    if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text.Trim()))
-                        mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text.Trim());
+                    if (!mMosaic[mIndexCloneInMosaic].tags.Contains(tag.mTextBox.Text.Trim()))
+                        mMosaic[mIndexCloneInMosaic].tags.Add(tag.mTextBox.Text.Trim());
                 }
             }
         }
@@ -238,14 +247,15 @@ namespace AppliPhoto
         {
             UpdateTags();
 
-            if (indexCloneInMosaic == -1)
+            if (mIndexCloneInMosaic == -1)
                 return;
-            if (indexCloneInMosaic == 0)
-                indexCloneInMosaic = mosaic.Count - 1;
+            if (mIndexCloneInMosaic == 0)
+                mIndexCloneInMosaic = mMosaic.Count - 1;
             else
-                indexCloneInMosaic -= 1;
+                mIndexCloneInMosaic -= 1;
 
-            clone.ImageLocation = mosaic[indexCloneInMosaic].fileName;
+            mClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
+
             LoadPictureTags();
         }
 
@@ -253,14 +263,14 @@ namespace AppliPhoto
         {
             UpdateTags();
 
-            if (indexCloneInMosaic == -1)
+            if (mIndexCloneInMosaic == -1)
                 return;
-            if (indexCloneInMosaic == mosaic.Count - 1)
-                indexCloneInMosaic = 0;
+            if (mIndexCloneInMosaic == mMosaic.Count - 1)
+                mIndexCloneInMosaic = 0;
             else
-                indexCloneInMosaic += 1;
+                mIndexCloneInMosaic += 1;
 
-            clone.ImageLocation = mosaic[indexCloneInMosaic].fileName;
+            mClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
             LoadPictureTags();
         }
 
@@ -276,14 +286,14 @@ namespace AppliPhoto
                 {
                     foreach (var fileName in FileSelector.FileNames)
                     {
-                        var destination = localImageDirectory + Path.GetFileName(fileName);
+                        var destination = kmLocalImageDirectory + Path.GetFileName(fileName);
                         if (!File.Exists(destination))
                         {
                             File.Copy(fileName, destination);
                             SetAndAddPictureToMosaicLayout(destination);
 
                             var imageData = new ImageData(destination, new List<String>());
-                            mosaic.Add(imageData);
+                            mMosaic.Add(imageData);
                         }
                     }
                 }
@@ -305,7 +315,7 @@ namespace AppliPhoto
                     var importedFiles = 0;
                     foreach (var fileName in files)
                     {
-                        var destination = localImageDirectory + Path.GetFileName(fileName);
+                        var destination = kmLocalImageDirectory + Path.GetFileName(fileName);
                         if (!File.Exists(destination))
                         {
                             File.Copy(fileName, destination);
@@ -313,7 +323,7 @@ namespace AppliPhoto
                             ++importedFiles;
 
                             var imageData = new ImageData(destination, new List<String>());
-                            mosaic.Add(imageData);
+                            mMosaic.Add(imageData);
                         }
                     }
 
@@ -324,10 +334,10 @@ namespace AppliPhoto
 
         private void SerializeToJSON(object sender, EventArgs e)
         {
-            using (var file = File.CreateText(metadataStore))
+            using (var file = File.CreateText(kmMetadataStore))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, mosaic);
+                serializer.Serialize(file, mMosaic);
             }
         }
     }
