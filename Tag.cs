@@ -81,6 +81,7 @@ namespace AppliPhoto
 
         private void DeleteButtonClick(object sender, EventArgs e)
         {
+            mMain.DeleteTag(mTextBox.Text);
             Dispose();
         }
     }

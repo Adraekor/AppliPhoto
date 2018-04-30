@@ -96,11 +96,22 @@ namespace AppliPhoto
             mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
+        public void DeleteTag(string tag)
+        {
+            mosaic[indexCloneInMosaic].DeleteTag(tag);
+        }
+
+        public void AddTag(string tag)
+        {
+            mosaic[indexCloneInMosaic].AddTag(tag);
+        }
+
         private void AddTagButton(object sender, EventArgs e)
         {
-            string promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
+            var promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
             if (promptValue.Trim() != "")
             {
+                mosaic[indexCloneInMosaic].AddTag(promptValue);
                 var c = new Tag(promptValue, this);
                 tagPanel.Controls.Remove(AddTagToPicture);
                 tagPanel.Controls.Add(c);
