@@ -13,11 +13,9 @@ namespace AppliPhoto
     {
         private List<ImageData> mosaic = new List<ImageData>();
         private PictureBox clone;
+        private PictureBox ImageToBeDeleted;
         private int indexCloneInMosaic = -1;
-        private PictureBox leftArrow, rightArrow;
         private Button AddTagToPicture;
-        public string currentlyModifiedTag;
-        public string currentlyModifiedTagOldValue;
 
         private const string tempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string localImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -42,7 +40,7 @@ namespace AppliPhoto
                 Width = 20,
                 Height = 20
             };
-            AddTagToPicture.Click += ButtonAddTag;
+            AddTagToPicture.Click += AddTagButton;
 
             clone = new PictureBox
             {
@@ -51,16 +49,16 @@ namespace AppliPhoto
             };
             soloImageLayout.Controls.Add(clone);
 
-            leftArrow = new PictureBox();
-
-            leftArrow.Image = new Bitmap(@"asset\left_arrow.png");
-            leftArrow.SizeMode = PictureBoxSizeMode.Zoom;
-            leftArrow.Anchor = AnchorStyles.Left;
-            
+            var leftArrow = new PictureBox
+            {
+                Image = new Bitmap(@"asset\left_arrow.png"),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Left
+            };
             leftArrow.MouseClick += new MouseEventHandler(LeftImageButton_Click);
             leftArrow.Location = new Point(0, (soloImageLayout.Height - leftArrow.Height) / 4);
 
-            rightArrow = new PictureBox
+            var rightArrow = new PictureBox
             {
                 Image = new Bitmap(@"asset\right_arrow.png"),
                 SizeMode = PictureBoxSizeMode.Zoom,
@@ -87,13 +85,18 @@ namespace AppliPhoto
 
             //test();
         }
+        private void test()
+        {
+            //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
+
+        }
 
         public void ModifyTag( string newTag, string oldTag )
         {
             mosaic[indexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
-        private void ButtonAddTag(object sender, EventArgs e)
+        private void AddTagButton(object sender, EventArgs e)
         {
             string promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
             if (promptValue.Trim() != "")
@@ -105,32 +108,16 @@ namespace AppliPhoto
             }
         }
 
-        private void test()
+        private void ErasePictureFromApplication()
         {
-            //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
-
-            for (int i = 0; i < 10; i++)
-            {
-                string content;
-
-                if (i % 3 == 0)
-                    content = "Salut je suis un tag n°1";
-                else if (i % 3 == 1)
-                    content = "Coucou je suis n°2";
-                else
-                    content = "prout prout";
-
-                Tag c = new Tag( content, this );
-                tagPanel.Controls.Add(c);
-            }
+            var fileName = ImageToBeDeleted.ImageLocation;
+            ImageToBeDeleted.Dispose();
+            mosaic.Remove(mosaic.First(s => s.fileName.Equals(fileName)));
         }
 
-        private void ErasePictureFromApplication(string fileName)
+        private void ShowRightClickMenu()
         {
-            mosaicLayout.Controls.Clear();
-            mosaic.Remove(mosaic.First(s => s.fileName.Equals(fileName)));
-            foreach (var picture in mosaic)
-                SetAndAddPictureToMosaicLayout(picture.fileName);
+
         }
 
         private void ClearTemporaryImages()
@@ -176,19 +163,27 @@ namespace AppliPhoto
             return res;
         }
 
-        private void PictureClickEvent(object sender, EventArgs e)
+        private void PictureClickEvent(object sender, MouseEventArgs e)
         {
-            UpdateTags();
+            if (e.Button == MouseButtons.Left)
+            {
+                UpdateTags();
 
-            var picturePath = ((PictureBox)sender).ImageLocation;
-            indexCloneInMosaic = mosaic.IndexOf( mosaic.First( s => s.fileName.Equals( picturePath, StringComparison.OrdinalIgnoreCase ) ) );
+                var picturePath = ((PictureBox)sender).ImageLocation;
+                indexCloneInMosaic = mosaic.IndexOf(mosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
 
-            clone.ImageLocation = picturePath;
-            clone.Width = soloImageLayout.Width / 2;
-            clone.Height = 3 * soloImageLayout.Height / 4;
-            clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
+                clone.ImageLocation = picturePath;
+                clone.Width = soloImageLayout.Width / 2;
+                clone.Height = 3 * soloImageLayout.Height / 4;
+                clone.Location = new Point((soloImageLayout.Width - clone.Width) / 2, 0);
 
-            LoadPictureTags();
+                LoadPictureTags();
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                ImageToBeDeleted = (PictureBox)sender;
+                ShowRightClickMenu();
+            }
         }
 
         private void LoadPictureTags()
@@ -209,9 +204,9 @@ namespace AppliPhoto
                     var serializer = new JsonSerializer();
                     mosaic = (List<ImageData>)serializer.Deserialize(file, typeof(List<ImageData>));
                 }
-                if (mosaic == null)
-                    mosaic = new List<ImageData>();
             }
+            if (mosaic == null)
+                mosaic = new List<ImageData>();
         }
 
         private void UpdateTags()
@@ -219,9 +214,9 @@ namespace AppliPhoto
             if (indexCloneInMosaic != -1)
             {
                 mosaic[indexCloneInMosaic].tags.Clear();
-                for(int i = 0; i < tagPanel.Controls.Count - 1; ++i)
+                for( var i = 0; i < tagPanel.Controls.Count - 1; ++i )
                 {
-                    Tag tag = (Tag) tagPanel.Controls[i];
+                    var tag = (Tag) tagPanel.Controls[i];
                     if (!mosaic[indexCloneInMosaic].tags.Contains(tag.mTextBox.Text.Trim()))
                         mosaic[indexCloneInMosaic].tags.Add(tag.mTextBox.Text.Trim());
                 }

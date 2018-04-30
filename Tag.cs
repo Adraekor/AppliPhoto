@@ -51,6 +51,10 @@ namespace AppliPhoto
         private void StoreOldTag(object sender, EventArgs e)
         {
             mOldTag = mTextBox.Text;
+            mTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
+            Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
+            mTextBox.Width = size.Width;
+            mButton.Location = new Point(mTextBox.Width, 0);
         }
 
         private void TextValidating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -73,11 +77,6 @@ namespace AppliPhoto
             Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
             mTextBox.Width = size.Width;
             mButton.Location = new Point(mTextBox.Width, 0);
-
-            if( e.KeyCode == Keys.Enter )
-            {
-                TextValidating(null, null);
-            }
         }
 
         private void DeleteButtonClick(object sender, EventArgs e)
