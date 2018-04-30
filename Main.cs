@@ -187,13 +187,16 @@ namespace AppliPhoto
 
                 if (ModifierKeys == Keys.Control)
                 {
+                    if (mSelectedItems.Count == 1)
+                        UpdateTags();
                     mSelectedItems.Add(currentPicture);
                     mLastSelectedPicture = currentPicture;
                     tagPanel.Controls.Clear();
                 }
                 else
                 {
-                    UpdateTags();
+                    if(mSelectedItems.Count == 1)
+                        UpdateTags();
                     mIndexCloneInMosaic = mMosaic.IndexOf(mMosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
                     foreach ( var i in mSelectedItems )
                     {
