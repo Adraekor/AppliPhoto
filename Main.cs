@@ -161,19 +161,17 @@ namespace AppliPhoto
             mosaicLayout.Controls.Add(picture);
         }
 
-        private List<ImageData> SeekTagThroughMosaic(List<string> tagsToFind, List<string> tagsToAvoid)
+        private List<ImageData> SeekTagThroughMosaic( List<string> tagsToFind, List<string> tagsToAvoid )
         {
             var res = new List<ImageData>();
 
-            foreach (var tagName in tagsToFind)
-            {
-                res = mMosaic.Where(p => p.tags.Any(tag => tag.Equals(tagName))).ToList();
-            }
+            foreach ( var tagName in tagsToFind )
+                res = mMosaic.Where( p => p.tags.Any( tag => tag.Equals( tagName ) ) ).ToList();
 
-            foreach (var r in res)
-                foreach (var tagName in tagsToAvoid)
-                    if (r.tags.Contains(tagName))
-                        res.Remove(r);
+            foreach ( var r in res )
+                foreach ( var tagName in tagsToAvoid )
+                    if ( r.tags.Contains( tagName ) )
+                        res.Remove( r );
 
             //foreach( var imageData in mosaic )
             //    foreach ( var acceptedTag in tagsToFind )
@@ -184,47 +182,58 @@ namespace AppliPhoto
             return res;
         }
 
-        private void PictureClick(object sender, MouseEventArgs e)
+        private void MultiSelect( PictureBox picture )
         {
-            if (e.Button == MouseButtons.Left)
+            mSelectedItems.Add( picture );
+            mLastSelectedPicture = picture;
+            tagPanel.Controls.Clear();
+        }
+
+        private void ChangeCurrentlySelectedImage( PictureBox picture )
+        {
+            var picturePath = picture.ImageLocation;
+
+            mIndexCloneInMosaic = mMosaic.IndexOf(mMosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
+
+            foreach ( var i in mSelectedItems )
+                i.BorderStyle = BorderStyle.None;
+
+            mSelectedItems.Clear();
+            mLastSelectedPicture.BorderStyle = BorderStyle.None;
+            mLastSelectedPicture = picture;
+            mSelectedItems.Add( picture );
+            picture.BorderStyle = BorderStyle.FixedSingle;
+
+            LoadPictureTags();
+            UpdateClone( picturePath );
+        }
+
+        private void UpdateClone( string clonePath )
+        {
+            mClone.ImageLocation = clonePath;
+            mClone.Width = soloImageLayout.Width / 2;
+            mClone.Height = 3 * soloImageLayout.Height / 4;
+            mClone.Location = new Point( ( soloImageLayout.Width - mClone.Width ) / 2, 0 );
+        }
+
+        private void PictureClick( object sender, MouseEventArgs e )
+        {
+            if ( e.Button == MouseButtons.Left )
             {
-                var currentPicture = ((PictureBox)sender);
-                var picturePath = currentPicture.ImageLocation;
+                var currentPicture = ( ( PictureBox ) sender );
                 currentPicture.BorderStyle = BorderStyle.FixedSingle;
 
-                if (ModifierKeys == Keys.Control)
-                {
-                    if (mSelectedItems.Count == 1)
-                        UpdateTags();
-                    mSelectedItems.Add(currentPicture);
-                    mLastSelectedPicture = currentPicture;
-                    tagPanel.Controls.Clear();
-                }
-                else
-                {
-                    if(mSelectedItems.Count == 1)
-                        UpdateTags();
-                    mIndexCloneInMosaic = mMosaic.IndexOf(mMosaic.First(s => s.fileName.Equals(picturePath, StringComparison.OrdinalIgnoreCase)));
-                    foreach ( var i in mSelectedItems )
-                    {
-                        i.BorderStyle = BorderStyle.None;
-                    }
-                    mSelectedItems.Clear();
-                    mLastSelectedPicture.BorderStyle = BorderStyle.None;
-                    mLastSelectedPicture = currentPicture;
-                    mSelectedItems.Add(currentPicture);
-                    currentPicture.BorderStyle = BorderStyle.FixedSingle;
+                if ( mSelectedItems.Count == 1 )
+                    UpdateTags();
 
-                    LoadPictureTags();
-                    mClone.ImageLocation = picturePath;
-                    mClone.Width = soloImageLayout.Width / 2;
-                    mClone.Height = 3 * soloImageLayout.Height / 4;
-                    mClone.Location = new Point((soloImageLayout.Width - mClone.Width) / 2, 0);
-                }
+                if (ModifierKeys == Keys.Control)
+                    MultiSelect( currentPicture );
+                else
+                    ChangeCurrentlySelectedImage( currentPicture );
             }
-            else if (e.Button == MouseButtons.Right)
+            else if ( e.Button == MouseButtons.Right )
             {
-                mImageToBeDeleted = (PictureBox)sender;
+                mImageToBeDeleted = ( PictureBox )sender;
                 ShowRightClickMenu();
             }
         }
@@ -240,44 +249,44 @@ namespace AppliPhoto
 
         private void LoadAllImportedImageMetadata()
         {
-            if (File.Exists(kmMetadataStore))
+            if ( File.Exists( kmMetadataStore ) )
             {
-                using (var file = File.OpenText(kmMetadataStore))
+                using ( var file = File.OpenText( kmMetadataStore ) )
                 {
                     var serializer = new JsonSerializer();
-                    mMosaic = (List<ImageData>)serializer.Deserialize(file, typeof(List<ImageData>));
+                    mMosaic = ( List< ImageData > ) serializer.Deserialize( file, typeof( List< ImageData > ) );
                 }
             }
-            if (mMosaic == null)
-                mMosaic = new List<ImageData>();
+            if ( mMosaic == null )
+                mMosaic = new List< ImageData >();
         }
 
         private void UpdateTags()
         {
-            if (mIndexCloneInMosaic != -1)
+            if ( mIndexCloneInMosaic != -1 )
             {
-                mMosaic[mIndexCloneInMosaic].tags.Clear();
+                mMosaic[ mIndexCloneInMosaic ].tags.Clear();
                 for( var i = 0; i < tagPanel.Controls.Count - 1; ++i )
                 {
-                    var tag = (Tag) tagPanel.Controls[i];
-                    if (!mMosaic[mIndexCloneInMosaic].tags.Contains(tag.mTextBox.Text.Trim()))
-                        mMosaic[mIndexCloneInMosaic].tags.Add(tag.mTextBox.Text.Trim());
+                    var tag = ( Tag ) tagPanel.Controls[ i ];
+                    if (!mMosaic[ mIndexCloneInMosaic ].tags.Contains( tag.mTextBox.Text.Trim() ) )
+                        mMosaic[ mIndexCloneInMosaic ].tags.Add( tag.mTextBox.Text.Trim() );
                 }
             }
         }
 
-        private void LeftImageButton_Click(object sender, EventArgs e)
+        private void LeftImageButton_Click( object sender, EventArgs e )
         {
             UpdateTags();
 
-            if (mIndexCloneInMosaic == -1)
+            if ( mIndexCloneInMosaic == -1 )
                 return;
-            if (mIndexCloneInMosaic == 0)
+            if ( mIndexCloneInMosaic == 0 )
                 mIndexCloneInMosaic = mMosaic.Count - 1;
             else
                 mIndexCloneInMosaic -= 1;
 
-            mClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
+            mClone.ImageLocation = mMosaic[ mIndexCloneInMosaic ].fileName;
 
             LoadPictureTags();
         }
