@@ -19,6 +19,9 @@ namespace AppliPhoto
         private Button mAddTagToPicture;
         private List<PictureBox> mSelectedItems = new List<PictureBox>();
 
+        private List<String> tag_recherches = new List<string>();
+        private List<String> tag_retirer = new List<string>();
+
         private const string kmTempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string kmLocalImageDirectory = @"c:\monApplicationPhoto\Images\";
         private const string kmMetadataStore = @"c:\monApplicationPhoto\Images\metadata.json";
@@ -101,7 +104,11 @@ namespace AppliPhoto
 
         public void DeleteTag(string tag)
         {
-            mMosaic[mIndexCloneInMosaic].DeleteTag(tag);
+            if(mIndexCloneInMosaic != -1)
+                mMosaic[mIndexCloneInMosaic].DeleteTag(tag);
+            // a mettre dans une autres fonction si possible
+            tag_recherches.Remove(tag);
+            tag_retirer.Remove(tag);
         }
 
         public void AddTag(string tag)
@@ -355,6 +362,47 @@ namespace AppliPhoto
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, mMosaic);
             }
+        }
+
+        private void button_Recherche_Click(object sender, EventArgs e)
+        {
+            if(textBox_recherche.Text != "" && !tag_recherches.Contains(textBox_recherche.Text))
+                tag_recherches.Add(textBox_recherche.Text);
+            if (tag_retirer.Contains(textBox_recherche.Text))
+                tag_retirer.Remove(textBox_recherche.Text);
+
+            update_liste_recherche();
+            
+        }
+
+        private void update_liste_recherche()
+        {
+            flowLayoutPanel_recherche.Controls.Clear();
+            foreach (string tag in tag_recherches)
+            {
+                var lab = new Tag(tag, this);
+       
+                flowLayoutPanel_recherche.Controls.Add(lab);
+            }
+            textBox_recherche.Text = "";
+            flowLayoutPanel_retirer.Controls.Clear();
+            foreach (string tag in tag_retirer)
+            {
+                var lab = new Tag(tag, this);
+
+                flowLayoutPanel_retirer.Controls.Add(lab);
+            }
+            textBox_retirer.Text = "";
+        }
+
+        private void button_retirer_Click(object sender, EventArgs e)
+        {
+            if (textBox_retirer.Text != "" && !tag_retirer.Contains(textBox_retirer.Text))
+                tag_retirer.Add(textBox_retirer.Text);
+            if (tag_recherches.Contains(textBox_retirer.Text))
+                tag_recherches.Remove(textBox_retirer.Text);
+
+            update_liste_recherche();
         }
     }
 }

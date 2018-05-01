@@ -36,15 +36,27 @@
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dossierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SplitScreen = new System.Windows.Forms.TableLayoutPanel();
+            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.button_Recherche = new System.Windows.Forms.Button();
+            this.textBox_recherche = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.soloImageLayout = new System.Windows.Forms.Panel();
             this.tagPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.textBox_retirer = new System.Windows.Forms.TextBox();
+            this.button_retirer = new System.Windows.Forms.Button();
+            this.splitContainer_recherche = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel_recherche = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel_retirer = new System.Windows.Forms.FlowLayoutPanel();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
+            this.mosaicLayout.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer_recherche)).BeginInit();
+            this.splitContainer_recherche.Panel1.SuspendLayout();
+            this.splitContainer_recherche.Panel2.SuspendLayout();
+            this.splitContainer_recherche.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolbar
@@ -74,20 +86,20 @@
             this.fichierToolStripMenuItem,
             this.dossierToolStripMenuItem});
             this.importerToolStripMenuItem.Name = "importerToolStripMenuItem";
-            this.importerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.importerToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.importerToolStripMenuItem.Text = "Importer";
             // 
             // fichierToolStripMenuItem
             // 
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
-            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fichierToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.fichierToolStripMenuItem.Text = "Image";
             this.fichierToolStripMenuItem.Click += new System.EventHandler(this.ImageImport);
             // 
             // dossierToolStripMenuItem
             // 
             this.dossierToolStripMenuItem.Name = "dossierToolStripMenuItem";
-            this.dossierToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dossierToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.dossierToolStripMenuItem.Text = "Dossier";
             this.dossierToolStripMenuItem.Click += new System.EventHandler(this.DirectoryImport);
             // 
@@ -105,6 +117,34 @@
             this.SplitScreen.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.SplitScreen.Size = new System.Drawing.Size(1362, 716);
             this.SplitScreen.TabIndex = 1;
+            // 
+            // mosaicLayout
+            // 
+            this.mosaicLayout.AutoScroll = true;
+            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mosaicLayout.Controls.Add(this.splitContainer_recherche);
+            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
+            this.mosaicLayout.Name = "mosaicLayout";
+            this.mosaicLayout.Size = new System.Drawing.Size(675, 710);
+            this.mosaicLayout.TabIndex = 0;
+            // 
+            // button_Recherche
+            // 
+            this.button_Recherche.Location = new System.Drawing.Point(179, 3);
+            this.button_Recherche.Name = "button_Recherche";
+            this.button_Recherche.Size = new System.Drawing.Size(103, 20);
+            this.button_Recherche.TabIndex = 1;
+            this.button_Recherche.Text = "Recherche Tag";
+            this.button_Recherche.UseVisualStyleBackColor = true;
+            this.button_Recherche.Click += new System.EventHandler(this.button_Recherche_Click);
+            // 
+            // textBox_recherche
+            // 
+            this.textBox_recherche.Location = new System.Drawing.Point(17, 4);
+            this.textBox_recherche.Name = "textBox_recherche";
+            this.textBox_recherche.Size = new System.Drawing.Size(135, 20);
+            this.textBox_recherche.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
@@ -148,15 +188,56 @@
             this.contextMenuStrip2.Name = "contextMenuStrip2";
             this.contextMenuStrip2.Size = new System.Drawing.Size(61, 4);
             // 
-            // mosaicLayout
+            // textBox_retirer
             // 
-            this.mosaicLayout.AutoScroll = true;
-            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
-            this.mosaicLayout.Name = "mosaicLayout";
-            this.mosaicLayout.Size = new System.Drawing.Size(675, 710);
-            this.mosaicLayout.TabIndex = 0;
+            this.textBox_retirer.Location = new System.Drawing.Point(16, 3);
+            this.textBox_retirer.Name = "textBox_retirer";
+            this.textBox_retirer.Size = new System.Drawing.Size(135, 20);
+            this.textBox_retirer.TabIndex = 2;
+            // 
+            // button_retirer
+            // 
+            this.button_retirer.Location = new System.Drawing.Point(186, 3);
+            this.button_retirer.Name = "button_retirer";
+            this.button_retirer.Size = new System.Drawing.Size(103, 20);
+            this.button_retirer.TabIndex = 3;
+            this.button_retirer.Text = "Retirer Tag";
+            this.button_retirer.UseVisualStyleBackColor = true;
+            this.button_retirer.Click += new System.EventHandler(this.button_retirer_Click);
+            // 
+            // splitContainer_recherche
+            // 
+            this.splitContainer_recherche.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer_recherche.Name = "splitContainer_recherche";
+            // 
+            // splitContainer_recherche.Panel1
+            // 
+            this.splitContainer_recherche.Panel1.Controls.Add(this.flowLayoutPanel_recherche);
+            this.splitContainer_recherche.Panel1.Controls.Add(this.textBox_recherche);
+            this.splitContainer_recherche.Panel1.Controls.Add(this.button_Recherche);
+            // 
+            // splitContainer_recherche.Panel2
+            // 
+            this.splitContainer_recherche.Panel2.Controls.Add(this.flowLayoutPanel_retirer);
+            this.splitContainer_recherche.Panel2.Controls.Add(this.button_retirer);
+            this.splitContainer_recherche.Panel2.Controls.Add(this.textBox_retirer);
+            this.splitContainer_recherche.Size = new System.Drawing.Size(672, 109);
+            this.splitContainer_recherche.SplitterDistance = 336;
+            this.splitContainer_recherche.TabIndex = 4;
+            // 
+            // flowLayoutPanel_recherche
+            // 
+            this.flowLayoutPanel_recherche.Location = new System.Drawing.Point(17, 30);
+            this.flowLayoutPanel_recherche.Name = "flowLayoutPanel_recherche";
+            this.flowLayoutPanel_recherche.Size = new System.Drawing.Size(316, 76);
+            this.flowLayoutPanel_recherche.TabIndex = 2;
+            // 
+            // flowLayoutPanel_retirer
+            // 
+            this.flowLayoutPanel_retirer.Location = new System.Drawing.Point(16, 30);
+            this.flowLayoutPanel_retirer.Name = "flowLayoutPanel_retirer";
+            this.flowLayoutPanel_retirer.Size = new System.Drawing.Size(313, 76);
+            this.flowLayoutPanel_retirer.TabIndex = 4;
             // 
             // Main
             // 
@@ -171,7 +252,14 @@
             this.toolbar.ResumeLayout(false);
             this.toolbar.PerformLayout();
             this.SplitScreen.ResumeLayout(false);
+            this.mosaicLayout.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.splitContainer_recherche.Panel1.ResumeLayout(false);
+            this.splitContainer_recherche.Panel1.PerformLayout();
+            this.splitContainer_recherche.Panel2.ResumeLayout(false);
+            this.splitContainer_recherche.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer_recherche)).EndInit();
+            this.splitContainer_recherche.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,5 +279,12 @@
         private System.Windows.Forms.FlowLayoutPanel tagPanel;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.FlowLayoutPanel mosaicLayout;
+        private System.Windows.Forms.Button button_Recherche;
+        private System.Windows.Forms.TextBox textBox_recherche;
+        private System.Windows.Forms.Button button_retirer;
+        private System.Windows.Forms.TextBox textBox_retirer;
+        private System.Windows.Forms.SplitContainer splitContainer_recherche;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_recherche;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_retirer;
     }
 }
