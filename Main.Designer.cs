@@ -37,26 +37,28 @@
             this.dossierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SplitScreen = new System.Windows.Forms.TableLayoutPanel();
             this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.button_Recherche = new System.Windows.Forms.Button();
+            this.splitContainer_recherche = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel_recherche = new System.Windows.Forms.FlowLayoutPanel();
             this.textBox_recherche = new System.Windows.Forms.TextBox();
+            this.button_Recherche = new System.Windows.Forms.Button();
+            this.flowLayoutPanel_retirer = new System.Windows.Forms.FlowLayoutPanel();
+            this.button_retirer = new System.Windows.Forms.Button();
+            this.textBox_retirer = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.soloImageLayout = new System.Windows.Forms.Panel();
             this.tagPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.textBox_retirer = new System.Windows.Forms.TextBox();
-            this.button_retirer = new System.Windows.Forms.Button();
-            this.splitContainer_recherche = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel_recherche = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel_retirer = new System.Windows.Forms.FlowLayoutPanel();
+            this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.mosaicLayout.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_recherche)).BeginInit();
             this.splitContainer_recherche.Panel1.SuspendLayout();
             this.splitContainer_recherche.Panel2.SuspendLayout();
             this.splitContainer_recherche.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolbar
@@ -129,6 +131,40 @@
             this.mosaicLayout.Size = new System.Drawing.Size(675, 710);
             this.mosaicLayout.TabIndex = 0;
             // 
+            // splitContainer_recherche
+            // 
+            this.splitContainer_recherche.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer_recherche.Name = "splitContainer_recherche";
+            // 
+            // splitContainer_recherche.Panel1
+            // 
+            this.splitContainer_recherche.Panel1.Controls.Add(this.flowLayoutPanel_recherche);
+            this.splitContainer_recherche.Panel1.Controls.Add(this.textBox_recherche);
+            this.splitContainer_recherche.Panel1.Controls.Add(this.button_Recherche);
+            // 
+            // splitContainer_recherche.Panel2
+            // 
+            this.splitContainer_recherche.Panel2.Controls.Add(this.flowLayoutPanel_retirer);
+            this.splitContainer_recherche.Panel2.Controls.Add(this.button_retirer);
+            this.splitContainer_recherche.Panel2.Controls.Add(this.textBox_retirer);
+            this.splitContainer_recherche.Size = new System.Drawing.Size(672, 109);
+            this.splitContainer_recherche.SplitterDistance = 336;
+            this.splitContainer_recherche.TabIndex = 4;
+            // 
+            // flowLayoutPanel_recherche
+            // 
+            this.flowLayoutPanel_recherche.Location = new System.Drawing.Point(17, 30);
+            this.flowLayoutPanel_recherche.Name = "flowLayoutPanel_recherche";
+            this.flowLayoutPanel_recherche.Size = new System.Drawing.Size(316, 76);
+            this.flowLayoutPanel_recherche.TabIndex = 2;
+            // 
+            // textBox_recherche
+            // 
+            this.textBox_recherche.Location = new System.Drawing.Point(17, 4);
+            this.textBox_recherche.Name = "textBox_recherche";
+            this.textBox_recherche.Size = new System.Drawing.Size(135, 20);
+            this.textBox_recherche.TabIndex = 0;
+            // 
             // button_Recherche
             // 
             this.button_Recherche.Location = new System.Drawing.Point(179, 3);
@@ -139,12 +175,29 @@
             this.button_Recherche.UseVisualStyleBackColor = true;
             this.button_Recherche.Click += new System.EventHandler(this.button_Recherche_Click);
             // 
-            // textBox_recherche
+            // flowLayoutPanel_retirer
             // 
-            this.textBox_recherche.Location = new System.Drawing.Point(17, 4);
-            this.textBox_recherche.Name = "textBox_recherche";
-            this.textBox_recherche.Size = new System.Drawing.Size(135, 20);
-            this.textBox_recherche.TabIndex = 0;
+            this.flowLayoutPanel_retirer.Location = new System.Drawing.Point(16, 30);
+            this.flowLayoutPanel_retirer.Name = "flowLayoutPanel_retirer";
+            this.flowLayoutPanel_retirer.Size = new System.Drawing.Size(313, 76);
+            this.flowLayoutPanel_retirer.TabIndex = 4;
+            // 
+            // button_retirer
+            // 
+            this.button_retirer.Location = new System.Drawing.Point(186, 3);
+            this.button_retirer.Name = "button_retirer";
+            this.button_retirer.Size = new System.Drawing.Size(103, 20);
+            this.button_retirer.TabIndex = 3;
+            this.button_retirer.Text = "Retirer Tag";
+            this.button_retirer.UseVisualStyleBackColor = true;
+            this.button_retirer.Click += new System.EventHandler(this.button_retirer_Click);
+            // 
+            // textBox_retirer
+            // 
+            this.textBox_retirer.Location = new System.Drawing.Point(16, 3);
+            this.textBox_retirer.Name = "textBox_retirer";
+            this.textBox_retirer.Size = new System.Drawing.Size(135, 20);
+            this.textBox_retirer.TabIndex = 2;
             // 
             // tableLayoutPanel1
             // 
@@ -180,64 +233,22 @@
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.effacerToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
             // 
             // contextMenuStrip2
             // 
             this.contextMenuStrip2.Name = "contextMenuStrip2";
             this.contextMenuStrip2.Size = new System.Drawing.Size(61, 4);
             // 
-            // textBox_retirer
+            // effacerToolStripMenuItem
             // 
-            this.textBox_retirer.Location = new System.Drawing.Point(16, 3);
-            this.textBox_retirer.Name = "textBox_retirer";
-            this.textBox_retirer.Size = new System.Drawing.Size(135, 20);
-            this.textBox_retirer.TabIndex = 2;
-            // 
-            // button_retirer
-            // 
-            this.button_retirer.Location = new System.Drawing.Point(186, 3);
-            this.button_retirer.Name = "button_retirer";
-            this.button_retirer.Size = new System.Drawing.Size(103, 20);
-            this.button_retirer.TabIndex = 3;
-            this.button_retirer.Text = "Retirer Tag";
-            this.button_retirer.UseVisualStyleBackColor = true;
-            this.button_retirer.Click += new System.EventHandler(this.button_retirer_Click);
-            // 
-            // splitContainer_recherche
-            // 
-            this.splitContainer_recherche.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer_recherche.Name = "splitContainer_recherche";
-            // 
-            // splitContainer_recherche.Panel1
-            // 
-            this.splitContainer_recherche.Panel1.Controls.Add(this.flowLayoutPanel_recherche);
-            this.splitContainer_recherche.Panel1.Controls.Add(this.textBox_recherche);
-            this.splitContainer_recherche.Panel1.Controls.Add(this.button_Recherche);
-            // 
-            // splitContainer_recherche.Panel2
-            // 
-            this.splitContainer_recherche.Panel2.Controls.Add(this.flowLayoutPanel_retirer);
-            this.splitContainer_recherche.Panel2.Controls.Add(this.button_retirer);
-            this.splitContainer_recherche.Panel2.Controls.Add(this.textBox_retirer);
-            this.splitContainer_recherche.Size = new System.Drawing.Size(672, 109);
-            this.splitContainer_recherche.SplitterDistance = 336;
-            this.splitContainer_recherche.TabIndex = 4;
-            // 
-            // flowLayoutPanel_recherche
-            // 
-            this.flowLayoutPanel_recherche.Location = new System.Drawing.Point(17, 30);
-            this.flowLayoutPanel_recherche.Name = "flowLayoutPanel_recherche";
-            this.flowLayoutPanel_recherche.Size = new System.Drawing.Size(316, 76);
-            this.flowLayoutPanel_recherche.TabIndex = 2;
-            // 
-            // flowLayoutPanel_retirer
-            // 
-            this.flowLayoutPanel_retirer.Location = new System.Drawing.Point(16, 30);
-            this.flowLayoutPanel_retirer.Name = "flowLayoutPanel_retirer";
-            this.flowLayoutPanel_retirer.Size = new System.Drawing.Size(313, 76);
-            this.flowLayoutPanel_retirer.TabIndex = 4;
+            this.effacerToolStripMenuItem.Name = "effacerToolStripMenuItem";
+            this.effacerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.effacerToolStripMenuItem.Text = "Effacer";
+            this.effacerToolStripMenuItem.Click += new System.EventHandler(this.effacerToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -253,13 +264,14 @@
             this.toolbar.PerformLayout();
             this.SplitScreen.ResumeLayout(false);
             this.mosaicLayout.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.splitContainer_recherche.Panel1.ResumeLayout(false);
             this.splitContainer_recherche.Panel1.PerformLayout();
             this.splitContainer_recherche.Panel2.ResumeLayout(false);
             this.splitContainer_recherche.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_recherche)).EndInit();
             this.splitContainer_recherche.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,5 +298,6 @@
         private System.Windows.Forms.SplitContainer splitContainer_recherche;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_recherche;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_retirer;
+        private System.Windows.Forms.ToolStripMenuItem effacerToolStripMenuItem;
     }
 }

@@ -138,7 +138,13 @@ namespace AppliPhoto
 
         private void ShowRightClickMenu()
         {
+            contextMenuStrip1.Show(MousePosition.X, MousePosition.Y);
+        }
 
+
+        private void effacerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ErasePictureFromApplication();
         }
 
         private void ClearTemporaryImages()
@@ -233,7 +239,7 @@ namespace AppliPhoto
             }
             else if ( e.Button == MouseButtons.Right )
             {
-                mImageToBeDeleted = ( PictureBox )sender;
+                mImageToBeDeleted = ( PictureBox )sender;                
                 ShowRightClickMenu();
             }
         }
