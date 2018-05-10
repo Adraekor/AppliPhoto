@@ -22,9 +22,13 @@ namespace AppliPhoto
         private List<String> tag_recherches = new List<string>();
         private List<String> tag_retirer = new List<string>();
 
+        private List<Tag> mTagList;
+        private TreeView mTagTree = new TreeView();
+
         private const string kmTempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string kmLocalImageDirectory = @"c:\monApplicationPhoto\Images\";
         private const string kmMetadataStore = @"c:\monApplicationPhoto\Images\metadata.json";
+        private const string kmTagList = @"c:\monApplicationPhoto\Images\tagList.json";
 
         public Main()
         {
@@ -37,6 +41,8 @@ namespace AppliPhoto
             mLastSelectedPicture = new PictureBox();
 
             LoadAllImportedImageMetadata();
+            LoadTagHierarchy();
+            AddTagsToTreeView();
 
             ClearTemporaryImages();
             DossierImage.CreateFolder();
@@ -74,8 +80,11 @@ namespace AppliPhoto
             rightArrow.MouseClick += new MouseEventHandler(RightImageButton_Click);
             rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 4);
 
+            mTagTree.Dock = DockStyle.Fill;
+
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
+            TagListImagesSplit.Controls.Add(mTagTree);
 
             foreach (var picture in mMosaic)
             {
@@ -88,13 +97,60 @@ namespace AppliPhoto
                     SetAndAddPictureToMosaicLayout(fileName);
                 }
             }
-
-            //test();
         }
 
-        private void test()
+        private void LoadTagHierarchy()
+        {
+            if (File.Exists(kmTagList))
+            {
+                using (var file = File.OpenText(kmTagList))
+                {
+                    var serializer = new JsonSerializer();
+                    mTagList = (List<Tag>)serializer.Deserialize(file, typeof(List<Tag>));
+                }
+            }
+            if (mTagList == null)
+                mTagList = new List<Tag>();
+        }
+
+        private void Test()
         {
             //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
+
+            Tag t = new Tag("Bonjour 1");
+            t.tags.Add("Bonjour 11");
+            t.tags.Add("Bonjour 12");
+            t.tags.Add("Bonjour 13");
+            Tag t2 = new Tag("Bonjour 2");
+            t2.tags.Add("Bonjour 21");
+            Tag t3 = new Tag("Bonjour 3");
+            Tag t4 = new Tag("Bonjour 4");
+            Tag t5 = new Tag("Bonjour 5");
+
+            mTagList.Add(t);
+            mTagList.Add(t2);
+            mTagList.Add(t3);
+            mTagList.Add(t4);
+            mTagList.Add(t5);
+        }
+
+        private void AddTagsToTreeView()
+        {
+            foreach( var currentTag in mTagList )
+            {
+                if (currentTag.tags.Count == 0)
+                {
+                    mTagTree.Nodes.Add(currentTag.name);
+                }
+                else
+                {
+                    List<TreeNode> subTagNames = new List<TreeNode>();
+                    foreach ( var subTag in currentTag.tags)
+                        subTagNames.Add(new TreeNode(subTag));
+
+                    mTagTree.Nodes.Add(new TreeNode( currentTag.name, subTagNames.ToArray()));
+                }
+            }
         }
 
         public void ModifyTag( string newTag, string oldTag )
@@ -104,7 +160,7 @@ namespace AppliPhoto
 
         public void DeleteTag(string tag)
         {
-            if(mIndexCloneInMosaic != -1)
+            if( mIndexCloneInMosaic != -1 )
                 mMosaic[mIndexCloneInMosaic].DeleteTag(tag);
             // a mettre dans une autres fonction si possible
             tag_recherches.Remove(tag);
@@ -122,7 +178,7 @@ namespace AppliPhoto
             if (promptValue.Trim() != "")
             {
                 mMosaic[mIndexCloneInMosaic].AddTag(promptValue);
-                var c = new Tag(promptValue, this);
+                var c = new TagView(promptValue, this);
                 tagPanel.Controls.Remove(mAddTagToPicture);
                 tagPanel.Controls.Add(c);
                 tagPanel.Controls.Add(mAddTagToPicture);
@@ -141,8 +197,7 @@ namespace AppliPhoto
             contextMenuStrip1.Show(MousePosition.X, MousePosition.Y);
         }
 
-
-        private void effacerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EraseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ErasePictureFromApplication();
         }
@@ -188,7 +243,7 @@ namespace AppliPhoto
             return res;
         }
 
-        private void MultiSelect( PictureBox picture )
+        private void CtrlMultiSelect( PictureBox picture )
         {
             mSelectedItems.Add( picture );
             mLastSelectedPicture = picture;
@@ -233,7 +288,7 @@ namespace AppliPhoto
                     UpdateTags();
 
                 if (ModifierKeys == Keys.Control)
-                    MultiSelect( currentPicture );
+                    CtrlMultiSelect( currentPicture );
                 else
                     ChangeCurrentlySelectedImage( currentPicture );
             }
@@ -248,7 +303,7 @@ namespace AppliPhoto
         {
             tagPanel.Controls.Clear();
             foreach ( var tag in mMosaic[ mIndexCloneInMosaic ].tags )
-                tagPanel.Controls.Add( new Tag( tag, this ) );
+                tagPanel.Controls.Add( new TagView( tag, this ) );
 
             tagPanel.Controls.Add(mAddTagToPicture);
         }
@@ -274,7 +329,7 @@ namespace AppliPhoto
                 mMosaic[ mIndexCloneInMosaic ].tags.Clear();
                 for( var i = 0; i < tagPanel.Controls.Count - 1; ++i )
                 {
-                    var tag = ( Tag ) tagPanel.Controls[ i ];
+                    var tag = ( TagView ) tagPanel.Controls[ i ];
                     if (!mMosaic[ mIndexCloneInMosaic ].tags.Contains( tag.mTextBox.Text.Trim() ) )
                         mMosaic[ mIndexCloneInMosaic ].tags.Add( tag.mTextBox.Text.Trim() );
                 }
@@ -377,25 +432,32 @@ namespace AppliPhoto
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, mMosaic);
             }
+
+            using (var file = File.CreateText(kmTagList))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, mTagList);
+            }
+
         }
 
-        private void button_Recherche_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
             if(textBox_recherche.Text != "" && !tag_recherches.Contains(textBox_recherche.Text))
                 tag_recherches.Add(textBox_recherche.Text);
             if (tag_retirer.Contains(textBox_recherche.Text))
                 tag_retirer.Remove(textBox_recherche.Text);
 
-            update_liste_recherche();
+            UpdateSearchList();
             
         }
 
-        private void update_liste_recherche()
+        private void UpdateSearchList()
         {
             flowLayoutPanel_recherche.Controls.Clear();
             foreach (string tag in tag_recherches)
             {
-                var lab = new Tag(tag, this);
+                var lab = new TagView(tag, this);
        
                 flowLayoutPanel_recherche.Controls.Add(lab);
             }
@@ -403,21 +465,21 @@ namespace AppliPhoto
             flowLayoutPanel_retirer.Controls.Clear();
             foreach (string tag in tag_retirer)
             {
-                var lab = new Tag(tag, this);
+                var lab = new TagView(tag, this);
 
                 flowLayoutPanel_retirer.Controls.Add(lab);
             }
             textBox_retirer.Text = "";
         }
 
-        private void button_retirer_Click(object sender, EventArgs e)
+        private void RemoveButton_Click(object sender, EventArgs e)
         {
             if (textBox_retirer.Text != "" && !tag_retirer.Contains(textBox_retirer.Text))
                 tag_retirer.Add(textBox_retirer.Text);
             if (tag_recherches.Contains(textBox_retirer.Text))
                 tag_recherches.Remove(textBox_retirer.Text);
 
-            update_liste_recherche();
+            UpdateSearchList();
         }
     }
 }
