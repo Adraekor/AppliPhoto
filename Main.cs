@@ -81,10 +81,12 @@ namespace AppliPhoto
             rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 4);
 
             mTagTree.Dock = DockStyle.Fill;
+            mTagTree.MouseClick += TagTree_Click;
 
             soloImageLayout.Controls.Add(leftArrow);
             soloImageLayout.Controls.Add(rightArrow);
-            TagListImagesSplit.Controls.Add(mTagTree);
+
+            TagListSplit.Controls.Add(mTagTree);
 
             foreach (var picture in mMosaic)
             {
@@ -117,25 +119,11 @@ namespace AppliPhoto
         {
             //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
 
-            Tag t = new Tag("Bonjour 1");
-            t.tags.Add("Bonjour 11");
-            t.tags.Add("Bonjour 12");
-            t.tags.Add("Bonjour 13");
-            Tag t2 = new Tag("Bonjour 2");
-            t2.tags.Add("Bonjour 21");
-            Tag t3 = new Tag("Bonjour 3");
-            Tag t4 = new Tag("Bonjour 4");
-            Tag t5 = new Tag("Bonjour 5");
-
-            mTagList.Add(t);
-            mTagList.Add(t2);
-            mTagList.Add(t3);
-            mTagList.Add(t4);
-            mTagList.Add(t5);
         }
 
         private void AddTagsToTreeView()
         {
+            mTagTree.Nodes.Clear();
             foreach( var currentTag in mTagList )
             {
                 if (currentTag.tags.Count == 0)
@@ -299,6 +287,23 @@ namespace AppliPhoto
             }
         }
 
+        private void TagTree_Click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                TreeViewMenu.Show(MousePosition.X, MousePosition.Y);
+                var hit = mTagTree.HitTest(e.X, e.Y);
+                if (hit.Node == null)
+                {
+                    mTagTree.SelectedNode = null;
+                }
+                else
+                {
+                    mTagTree.SelectedNode = hit.Node;
+                }
+            }
+        }
+
         private void LoadPictureTags()
         {
             tagPanel.Controls.Clear();
@@ -449,7 +454,6 @@ namespace AppliPhoto
                 tag_retirer.Remove(textBox_recherche.Text);
 
             UpdateSearchList();
-            
         }
 
         private void UpdateSearchList()
@@ -480,6 +484,61 @@ namespace AppliPhoto
                 tag_recherches.Remove(textBox_retirer.Text);
 
             UpdateSearchList();
+        }
+
+        private void DeleteTagFromTreeView_Click(object sender, EventArgs e)
+        {
+            for( var i = 0; i < mTagList.Count; ++i)
+            {
+                if(mTagList[ i ].name == mTagTree.SelectedNode.Text)
+                {
+                    mTagList.Remove(mTagList[ i ]);
+                    break;
+                }
+            }
+            AddTagsToTreeView();
+        }
+
+        private void AddSuperTag_Click(object sender, EventArgs e)
+        {
+            var promptValue = Prompt.ShowDialog("Veuillez entrer le nom du super tag à créer", "Ajout d'un super tag");
+            if (promptValue.Trim() != "")
+            {
+                var i = mTagList.FirstOrDefault(s => s.name == promptValue);
+                if( i == null )
+                {
+                    mTagList.Add(new Tag(promptValue));
+                    mTagTree.Nodes.Add(new TreeNode(promptValue));
+                }
+                else
+                {
+                    MessageBox.Show("Ce super tag existe déjà");
+                }
+            }
+        }
+
+        private void AddSubtag_Click(object sender, EventArgs e)
+        {
+            var superTagList = new List<string>();
+            foreach(var currentSuperTag in mTagList)
+                superTagList.Add(currentSuperTag.name);
+
+            var promptValue = DropDownPrompt.ShowDialog(superTagList, "Veuillez choisir le super tag puis entrer le nom du sous tag à créer", "Ajout d'un sous tag");
+            if( promptValue.Item1 != "")
+            { 
+                var superTag = mTagList.First(s => s.name == promptValue.Item1);
+                if ( !superTag.tags.Contains( promptValue.Item2 ))
+                    superTag.tags.Add(promptValue.Item2);
+
+                for( var i = 0; i < mTagTree.Nodes.Count; ++i)
+                {
+                    if (mTagTree.Nodes[ i ].Text == promptValue.Item1)
+                    {
+                        mTagTree.Nodes[i].Nodes.Add( promptValue.Item2);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

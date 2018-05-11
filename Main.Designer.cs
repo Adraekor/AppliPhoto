@@ -50,6 +50,11 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TagListImagesSplit = new System.Windows.Forms.TableLayoutPanel();
+            this.TagListSplit = new System.Windows.Forms.TableLayoutPanel();
+            this.AddSuperTag = new System.Windows.Forms.Button();
+            this.AddSubTag = new System.Windows.Forms.Button();
+            this.TreeViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.effacerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.mosaicLayout.SuspendLayout();
@@ -60,6 +65,8 @@
             this.TagSoloImageSplit.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.TagListImagesSplit.SuspendLayout();
+            this.TagListSplit.SuspendLayout();
+            this.TreeViewMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolbar
@@ -252,6 +259,7 @@
             this.TagListImagesSplit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.TagListImagesSplit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85F));
             this.TagListImagesSplit.Controls.Add(this.SplitScreen, 1, 0);
+            this.TagListImagesSplit.Controls.Add(this.TagListSplit, 0, 0);
             this.TagListImagesSplit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TagListImagesSplit.Location = new System.Drawing.Point(0, 25);
             this.TagListImagesSplit.Name = "TagListImagesSplit";
@@ -259,6 +267,58 @@
             this.TagListImagesSplit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.TagListImagesSplit.Size = new System.Drawing.Size(1362, 716);
             this.TagListImagesSplit.TabIndex = 5;
+            // 
+            // TagListSplit
+            // 
+            this.TagListSplit.ColumnCount = 1;
+            this.TagListSplit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TagListSplit.Controls.Add(this.AddSuperTag, 0, 0);
+            this.TagListSplit.Controls.Add(this.AddSubTag, 0, 1);
+            this.TagListSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TagListSplit.Location = new System.Drawing.Point(3, 3);
+            this.TagListSplit.Name = "TagListSplit";
+            this.TagListSplit.RowCount = 3;
+            this.TagListSplit.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TagListSplit.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TagListSplit.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TagListSplit.Size = new System.Drawing.Size(198, 710);
+            this.TagListSplit.TabIndex = 2;
+            // 
+            // AddSuperTag
+            // 
+            this.AddSuperTag.Dock = System.Windows.Forms.DockStyle.Top;
+            this.AddSuperTag.Location = new System.Drawing.Point(3, 3);
+            this.AddSuperTag.Name = "AddSuperTag";
+            this.AddSuperTag.Size = new System.Drawing.Size(192, 26);
+            this.AddSuperTag.TabIndex = 4;
+            this.AddSuperTag.Text = "Ajouter un super tag";
+            this.AddSuperTag.UseVisualStyleBackColor = true;
+            this.AddSuperTag.Click += new System.EventHandler(this.AddSuperTag_Click);
+            // 
+            // AddSubTag
+            // 
+            this.AddSubTag.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AddSubTag.Location = new System.Drawing.Point(3, 35);
+            this.AddSubTag.Name = "AddSubTag";
+            this.AddSubTag.Size = new System.Drawing.Size(192, 23);
+            this.AddSubTag.TabIndex = 5;
+            this.AddSubTag.Text = "Ajouter un sous tag";
+            this.AddSubTag.UseVisualStyleBackColor = true;
+            this.AddSubTag.Click += new System.EventHandler(this.AddSubtag_Click);
+            // 
+            // TreeViewMenu
+            // 
+            this.TreeViewMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.effacerToolStripMenuItem1});
+            this.TreeViewMenu.Name = "TreeViewMenu";
+            this.TreeViewMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // effacerToolStripMenuItem1
+            // 
+            this.effacerToolStripMenuItem1.Name = "effacerToolStripMenuItem1";
+            this.effacerToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.effacerToolStripMenuItem1.Text = "Effacer";
+            this.effacerToolStripMenuItem1.Click += new System.EventHandler(this.DeleteTagFromTreeView_Click);
             // 
             // Main
             // 
@@ -283,6 +343,8 @@
             this.TagSoloImageSplit.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.TagListImagesSplit.ResumeLayout(false);
+            this.TagListSplit.ResumeLayout(false);
+            this.TreeViewMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -310,5 +372,10 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_retirer;
         private System.Windows.Forms.ToolStripMenuItem effacerToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel TagListImagesSplit;
+        private System.Windows.Forms.ContextMenuStrip TreeViewMenu;
+        private System.Windows.Forms.ToolStripMenuItem effacerToolStripMenuItem1;
+        private System.Windows.Forms.TableLayoutPanel TagListSplit;
+        private System.Windows.Forms.Button AddSuperTag;
+        private System.Windows.Forms.Button AddSubTag;
     }
 }

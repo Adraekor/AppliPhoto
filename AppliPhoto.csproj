@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DropDownPrompt.cs" />
     <Compile Include="Prompt.cs" />
     <Compile Include="DossierImage.cs" />
     <Compile Include="Main.cs">
