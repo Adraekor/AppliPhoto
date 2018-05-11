@@ -99,6 +99,8 @@ namespace AppliPhoto
                     SetAndAddPictureToMosaicLayout(fileName);
                 }
             }
+
+            Test();
         }
 
         private void LoadTagHierarchy()
@@ -119,6 +121,7 @@ namespace AppliPhoto
         {
             //var blaise = @"C:\monApplicationPhoto\Images\blaise_pascal.jpg";
 
+            SeekTagThroughMosaic(new List<string> { "Bonjour 1" }, new List<string>());
         }
 
         private void AddTagsToTreeView()
@@ -212,21 +215,46 @@ namespace AppliPhoto
 
         private List<ImageData> SeekTagThroughMosaic( List<string> tagsToFind, List<string> tagsToAvoid )
         {
+            bool changedTag;
+            do
+            {
+                changedTag = false;
+                for( int i = 0; i < tagsToFind.Count; ++i)
+                {
+                    foreach( var tagName in mTagList )
+                    {
+                        if (tagName.name == tagsToFind[ i ])
+                        {
+                            changedTag = true;
+                            tagsToFind.Remove(tagsToFind[ i ]);
+                            tagsToFind.AddRange(tagName.tags);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < tagsToAvoid.Count; ++i)
+                {
+                    foreach (var tagName in mTagList)
+                    {
+                        if (tagName.name == tagsToAvoid[ i ])
+                        {
+                            changedTag = true;
+                            tagsToAvoid.Remove(tagsToAvoid[ i ]);
+                            tagsToAvoid.AddRange(tagName.tags);
+                        }
+                    }
+                }
+            } while (changedTag);
+
             var res = new List<ImageData>();
 
             foreach ( var tagName in tagsToFind )
                 res = mMosaic.Where( p => p.tags.Any( tag => tag.Equals( tagName ) ) ).ToList();
 
-            foreach ( var r in res )
-                foreach ( var tagName in tagsToAvoid )
-                    if ( r.tags.Contains( tagName ) )
-                        res.Remove( r );
-
-            //foreach( var imageData in mosaic )
-            //    foreach ( var acceptedTag in tagsToFind )
-            //        foreach( var refusedTag in tagsToAvoid )
-            //            if ( imageData.tags.Contains( acceptedTag ) && !imageData.tags.Contains( refusedTag ) )
-            //                res.Add(imageData.fileName);
+            foreach (var r in res)
+                foreach (var tagName in tagsToAvoid)
+                    if (r.tags.Contains(tagName))
+                        res.Remove(r);
 
             return res;
         }
