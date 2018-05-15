@@ -219,6 +219,7 @@ namespace AppliPhoto
 
             picture.MouseClick += new MouseEventHandler(PictureClick);
             mosaicLayout.Controls.Add(picture);
+            
         }
 
         private List<ImageData> SeekTagThroughMosaic( List<string> tagsToFind, List<string> tagsToAvoid )
@@ -318,7 +319,7 @@ namespace AppliPhoto
             }
             else if ( e.Button == MouseButtons.Right )
             {
-                mImageToBeDeleted = ( PictureBox )sender;                
+                mImageToBeDeleted = ( PictureBox )sender;
                 ShowRightClickMenu();
             }
         }
@@ -498,7 +499,6 @@ namespace AppliPhoto
             foreach (string tag in tag_recherches)
             {
                 var lab = new TagViewRecherche(tag, this,1);
-       
                 flowLayoutPanel_recherche.Controls.Add(lab);
             }
             textBox_recherche.Text = "";
@@ -510,6 +510,24 @@ namespace AppliPhoto
                 flowLayoutPanel_retirer.Controls.Add(lab);
             }
             textBox_retirer.Text = "";
+
+            flowLayoutPanel_mosaic_recherche.Controls.Clear();
+            List<ImageData> images_recherche = SeekTagThroughMosaic(tag_recherches, tag_retirer);
+            foreach(var im in images_recherche)
+            {
+                PictureBox picture = new PictureBox
+                {
+                    Width = mosaicLayout.Width / 5,
+                    Height = 100,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    ImageLocation = im.fileName
+                };
+
+                picture.MouseClick += new MouseEventHandler(PictureClick);
+                flowLayoutPanel_mosaic_recherche.Controls.Add(picture);
+            }
+            //flowLayoutPanel_mosaic_recherche.Visible = true;
+            //mMosaic = new List<ImageData>();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
@@ -577,6 +595,16 @@ namespace AppliPhoto
             }
         }
 
-       
+        private void button_vider_recherche_Click(object sender, EventArgs e)
+        {
+            tag_recherches.Clear();
+            UpdateSearchList();
+        }
+
+        private void button_vider_retirer_Click(object sender, EventArgs e)
+        {
+            tag_retirer.Clear();
+            UpdateSearchList();
+        }
     }
 }
