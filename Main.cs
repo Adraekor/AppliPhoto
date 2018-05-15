@@ -149,13 +149,17 @@ namespace AppliPhoto
             mMosaic[mIndexCloneInMosaic].ModifyTagList(newTag, oldTag);
         }
 
-        public void DeleteTag(string tag)
+        public void DeleteTagImage(string tag)
         {
-            if( mIndexCloneInMosaic != -1 )
-                mMosaic[mIndexCloneInMosaic].DeleteTag(tag);
-            // a mettre dans une autres fonction si possible
-            tag_recherches.Remove(tag);
-            tag_retirer.Remove(tag);
+            mMosaic[mIndexCloneInMosaic].DeleteTag(tag);
+        }
+
+        public void DeleteTagRecherche(string tag, int type)
+        {
+            if(type == 1)
+                tag_recherches.Remove(tag);
+            else
+                tag_retirer.Remove(tag);
         }
 
         public void AddTag(string tag)
@@ -169,7 +173,7 @@ namespace AppliPhoto
             if (promptValue.Trim() != "")
             {
                 mMosaic[mIndexCloneInMosaic].AddTag(promptValue);
-                var c = new TagView(promptValue, this);
+                var c = new TagViewImage(promptValue, this);
                 tagPanel.Controls.Remove(mAddTagToPicture);
                 tagPanel.Controls.Add(c);
                 tagPanel.Controls.Add(mAddTagToPicture);
@@ -336,7 +340,7 @@ namespace AppliPhoto
         {
             tagPanel.Controls.Clear();
             foreach ( var tag in mMosaic[ mIndexCloneInMosaic ].tags )
-                tagPanel.Controls.Add( new TagView( tag, this ) );
+                tagPanel.Controls.Add( new TagViewImage( tag, this ) );
 
             tagPanel.Controls.Add(mAddTagToPicture);
         }
@@ -489,7 +493,7 @@ namespace AppliPhoto
             flowLayoutPanel_recherche.Controls.Clear();
             foreach (string tag in tag_recherches)
             {
-                var lab = new TagView(tag, this);
+                var lab = new TagViewRecherche(tag, this,1);
        
                 flowLayoutPanel_recherche.Controls.Add(lab);
             }
@@ -497,7 +501,7 @@ namespace AppliPhoto
             flowLayoutPanel_retirer.Controls.Clear();
             foreach (string tag in tag_retirer)
             {
-                var lab = new TagView(tag, this);
+                var lab = new TagViewRecherche(tag, this,0);
 
                 flowLayoutPanel_retirer.Controls.Add(lab);
             }
@@ -568,5 +572,7 @@ namespace AppliPhoto
                 }
             }
         }
+
+       
     }
 }

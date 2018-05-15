@@ -4,12 +4,12 @@ using System.Windows.Forms;
 
 namespace AppliPhoto
 {
-    public class TagView : UserControl
+    public abstract class TagView : UserControl
     {
-        private Main mMain;
-        private Button mButton;
+        public Main mMain;
+        public Button mButton;
         public TextBox mTextBox;
-        private string mOldTag;
+        public string mOldTag;
 
         public TagView( string iTag, Main iMain )
         {
@@ -48,7 +48,7 @@ namespace AppliPhoto
             mButton.Height = mTextBox.Height;
         }
 
-        private void StoreOldTag(object sender, EventArgs e)
+        public void StoreOldTag(object sender, EventArgs e)
         {
             mOldTag = mTextBox.Text;
             mTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
@@ -57,32 +57,12 @@ namespace AppliPhoto
             mButton.Location = new Point(mTextBox.Width, 0);
         }
 
-        private void TextValidating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (mTextBox.Text.Trim() == "")
-                mTextBox.Text = mOldTag;
 
-            mTextBox.Font = new Font("Arial", 12, FontStyle.Italic);
-            Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
-            mTextBox.Width = size.Width;
-            mButton.Location = new Point(mTextBox.Width, 0);
+        public abstract void TextValidating(object sender, System.ComponentModel.CancelEventArgs e);
 
-            mMain.ModifyTag(mTextBox.Text, mOldTag);
-        }
+        public abstract void TagModification(object sender, KeyEventArgs e);
 
-        private void TagModification(object sender, KeyEventArgs e)
-        {
-            if(mTextBox.Font.Italic)
-                mTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
-            Size size = TextRenderer.MeasureText(mTextBox.Text, mTextBox.Font);
-            mTextBox.Width = size.Width;
-            mButton.Location = new Point(mTextBox.Width, 0);
-        }
+        public abstract void DeleteButtonClick(object sender, EventArgs e);
 
-        private void DeleteButtonClick(object sender, EventArgs e)
-        {
-            mMain.DeleteTag(mTextBox.Text);
-            Dispose();
-        }
     }
 }
