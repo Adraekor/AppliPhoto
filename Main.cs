@@ -99,7 +99,6 @@ namespace AppliPhoto
                     SetAndAddPictureToMosaicLayout(fileName);
                 }
             }
-
             Test();
         }
 
@@ -181,6 +180,11 @@ namespace AppliPhoto
             var fileName = mImageToBeDeleted.ImageLocation;
             mImageToBeDeleted.Dispose();
             mMosaic.Remove(mMosaic.First(s => s.fileName.Equals(fileName)));
+            Console.WriteLine(kmLocalImageDirectory + fileName);
+            if (File.Exists(fileName)) { 
+            
+                File.Delete(fileName);
+            }           
         }
 
         private void ShowRightClickMenu()
