@@ -46,9 +46,11 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.textBox_recherche = new System.Windows.Forms.TextBox();
             this.button_Recherche = new System.Windows.Forms.Button();
+            this.button_vider_recherche = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.textBox_retirer = new System.Windows.Forms.TextBox();
             this.button_retirer = new System.Windows.Forms.Button();
+            this.button_vider_retirer = new System.Windows.Forms.Button();
             this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel_mosaic_recherche = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -59,8 +61,6 @@
             this.AddSubTag = new System.Windows.Forms.Button();
             this.TreeViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.button_vider_recherche = new System.Windows.Forms.Button();
-            this.button_vider_retirer = new System.Windows.Forms.Button();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.TagSoloImageSplit.SuspendLayout();
@@ -171,17 +171,18 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayout_mosaic.AutoSize = true;
+            this.tableLayout_mosaic.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayout_mosaic.ColumnCount = 1;
             this.tableLayout_mosaic.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayout_mosaic.Controls.Add(this.tableLayoutPanel_recherche, 0, 0);
-            this.tableLayout_mosaic.Controls.Add(this.mosaicLayout, 0, 1);
             this.tableLayout_mosaic.Controls.Add(this.flowLayoutPanel_mosaic_recherche, 0, 2);
+            this.tableLayout_mosaic.Controls.Add(this.mosaicLayout, 0, 1);
+            this.tableLayout_mosaic.Controls.Add(this.tableLayoutPanel_recherche, 0, 0);
             this.tableLayout_mosaic.Location = new System.Drawing.Point(3, 3);
             this.tableLayout_mosaic.Name = "tableLayout_mosaic";
             this.tableLayout_mosaic.RowCount = 3;
-            this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48F));
-            this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 52F));
-            this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 328F));
+            this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31.25F));
+            this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 68.75F));
+            this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 312F));
             this.tableLayout_mosaic.Size = new System.Drawing.Size(570, 704);
             this.tableLayout_mosaic.TabIndex = 2;
             // 
@@ -204,27 +205,29 @@
             this.tableLayoutPanel_recherche.RowCount = 2;
             this.tableLayoutPanel_recherche.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.97297F));
             this.tableLayoutPanel_recherche.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.02702F));
-            this.tableLayoutPanel_recherche.Size = new System.Drawing.Size(564, 174);
+            this.tableLayoutPanel_recherche.Size = new System.Drawing.Size(564, 116);
             this.tableLayoutPanel_recherche.TabIndex = 5;
             // 
             // flowLayoutPanel_retirer
             // 
             this.flowLayoutPanel_retirer.AutoScroll = true;
             this.flowLayoutPanel_retirer.AutoSize = true;
+            this.flowLayoutPanel_retirer.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.flowLayoutPanel_retirer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel_retirer.Location = new System.Drawing.Point(280, 60);
+            this.flowLayoutPanel_retirer.Location = new System.Drawing.Point(280, 41);
             this.flowLayoutPanel_retirer.Name = "flowLayoutPanel_retirer";
-            this.flowLayoutPanel_retirer.Size = new System.Drawing.Size(281, 111);
+            this.flowLayoutPanel_retirer.Size = new System.Drawing.Size(281, 72);
             this.flowLayoutPanel_retirer.TabIndex = 4;
             // 
             // flowLayoutPanel_recherche
             // 
             this.flowLayoutPanel_recherche.AutoScroll = true;
             this.flowLayoutPanel_recherche.AutoSize = true;
+            this.flowLayoutPanel_recherche.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.flowLayoutPanel_recherche.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel_recherche.Location = new System.Drawing.Point(3, 60);
+            this.flowLayoutPanel_recherche.Location = new System.Drawing.Point(3, 41);
             this.flowLayoutPanel_recherche.Name = "flowLayoutPanel_recherche";
-            this.flowLayoutPanel_recherche.Size = new System.Drawing.Size(271, 111);
+            this.flowLayoutPanel_recherche.Size = new System.Drawing.Size(271, 72);
             this.flowLayoutPanel_recherche.TabIndex = 2;
             // 
             // flowLayoutPanel1
@@ -232,13 +235,14 @@
             this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.flowLayoutPanel1.Controls.Add(this.textBox_recherche);
             this.flowLayoutPanel1.Controls.Add(this.button_Recherche);
             this.flowLayoutPanel1.Controls.Add(this.button_vider_recherche);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(271, 51);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(271, 32);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
             // textBox_recherche
@@ -259,18 +263,30 @@
             this.button_Recherche.UseVisualStyleBackColor = true;
             this.button_Recherche.Click += new System.EventHandler(this.SearchButton_Click);
             // 
+            // button_vider_recherche
+            // 
+            this.button_vider_recherche.AutoSize = true;
+            this.button_vider_recherche.Location = new System.Drawing.Point(212, 3);
+            this.button_vider_recherche.Name = "button_vider_recherche";
+            this.button_vider_recherche.Size = new System.Drawing.Size(41, 23);
+            this.button_vider_recherche.TabIndex = 2;
+            this.button_vider_recherche.Text = "Vider";
+            this.button_vider_recherche.UseVisualStyleBackColor = true;
+            this.button_vider_recherche.Click += new System.EventHandler(this.button_vider_recherche_Click);
+            // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.AutoScroll = true;
             this.flowLayoutPanel2.AutoSize = true;
             this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.flowLayoutPanel2.Controls.Add(this.textBox_retirer);
             this.flowLayoutPanel2.Controls.Add(this.button_retirer);
             this.flowLayoutPanel2.Controls.Add(this.button_vider_retirer);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(280, 3);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(281, 51);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(281, 32);
             this.flowLayoutPanel2.TabIndex = 6;
             // 
             // textBox_retirer
@@ -291,23 +307,36 @@
             this.button_retirer.UseVisualStyleBackColor = true;
             this.button_retirer.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
+            // button_vider_retirer
+            // 
+            this.button_vider_retirer.AutoSize = true;
+            this.button_vider_retirer.Location = new System.Drawing.Point(212, 3);
+            this.button_vider_retirer.Name = "button_vider_retirer";
+            this.button_vider_retirer.Size = new System.Drawing.Size(41, 23);
+            this.button_vider_retirer.TabIndex = 4;
+            this.button_vider_retirer.Text = "Vider";
+            this.button_vider_retirer.UseVisualStyleBackColor = true;
+            this.button_vider_retirer.Click += new System.EventHandler(this.button_vider_retirer_Click);
+            // 
             // mosaicLayout
             // 
             this.mosaicLayout.AutoScroll = true;
             this.mosaicLayout.AutoSize = true;
             this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mosaicLayout.BackColor = System.Drawing.SystemColors.Control;
             this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mosaicLayout.Location = new System.Drawing.Point(3, 183);
+            this.mosaicLayout.Location = new System.Drawing.Point(3, 125);
             this.mosaicLayout.Name = "mosaicLayout";
-            this.mosaicLayout.Size = new System.Drawing.Size(564, 189);
+            this.mosaicLayout.Size = new System.Drawing.Size(564, 263);
             this.mosaicLayout.TabIndex = 0;
             // 
             // flowLayoutPanel_mosaic_recherche
             // 
+            this.flowLayoutPanel_mosaic_recherche.BackColor = System.Drawing.SystemColors.ControlLight;
             this.flowLayoutPanel_mosaic_recherche.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel_mosaic_recherche.Location = new System.Drawing.Point(3, 378);
+            this.flowLayoutPanel_mosaic_recherche.Location = new System.Drawing.Point(3, 394);
             this.flowLayoutPanel_mosaic_recherche.Name = "flowLayoutPanel_mosaic_recherche";
-            this.flowLayoutPanel_mosaic_recherche.Size = new System.Drawing.Size(564, 323);
+            this.flowLayoutPanel_mosaic_recherche.Size = new System.Drawing.Size(564, 307);
             this.flowLayoutPanel_mosaic_recherche.TabIndex = 6;
             // 
             // contextMenuStrip1
@@ -390,28 +419,6 @@
             this.effacerToolStripMenuItem1.Size = new System.Drawing.Size(110, 22);
             this.effacerToolStripMenuItem1.Text = "Effacer";
             this.effacerToolStripMenuItem1.Click += new System.EventHandler(this.DeleteTagFromTreeView_Click);
-            // 
-            // button_vider_recherche
-            // 
-            this.button_vider_recherche.AutoSize = true;
-            this.button_vider_recherche.Location = new System.Drawing.Point(212, 3);
-            this.button_vider_recherche.Name = "button_vider_recherche";
-            this.button_vider_recherche.Size = new System.Drawing.Size(41, 23);
-            this.button_vider_recherche.TabIndex = 2;
-            this.button_vider_recherche.Text = "Vider";
-            this.button_vider_recherche.UseVisualStyleBackColor = true;
-            this.button_vider_recherche.Click += new System.EventHandler(this.button_vider_recherche_Click);
-            // 
-            // button_vider_retirer
-            // 
-            this.button_vider_retirer.AutoSize = true;
-            this.button_vider_retirer.Location = new System.Drawing.Point(212, 3);
-            this.button_vider_retirer.Name = "button_vider_retirer";
-            this.button_vider_retirer.Size = new System.Drawing.Size(41, 23);
-            this.button_vider_retirer.TabIndex = 4;
-            this.button_vider_retirer.Text = "Vider";
-            this.button_vider_retirer.UseVisualStyleBackColor = true;
-            this.button_vider_retirer.Click += new System.EventHandler(this.button_vider_retirer_Click);
             // 
             // Main
             // 

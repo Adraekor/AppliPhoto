@@ -20,6 +20,7 @@ namespace AppliPhoto
         {
             mMain.DeleteTagRecherche(mTextBox.Text,type);
             Dispose();
+            mMain.update_mosaic_recherche();
         }
 
         public override void TagModification(object sender, KeyEventArgs e)

@@ -12,10 +12,12 @@ namespace AppliPhoto
     public partial class Main : Form
     {
         private List<ImageData> mMosaic = new List<ImageData>();
+        private List<ImageData> mMosaicRecherche = new List<ImageData>();
         private PictureBox mClone;
         private PictureBox mImageToBeDeleted;
         private PictureBox mLastSelectedPicture;
         private int mIndexCloneInMosaic = -1;
+        private int mIndexCloneInMosaicRecherche = -1;
         private Button mAddTagToPicture;
         private List<PictureBox> mSelectedItems = new List<PictureBox>();
 
@@ -224,8 +226,8 @@ namespace AppliPhoto
 
         private List<ImageData> SeekTagThroughMosaic( List<string> tagsToFind, List<string> tagsToAvoid )
         {
-            bool changedTag;
-            do
+            //bool changedTag;
+            /*do
             {
                 changedTag = false;
                 for( int i = 0; i < tagsToFind.Count; ++i)
@@ -253,17 +255,17 @@ namespace AppliPhoto
                         }
                     }
                 }
-            } while (changedTag);
+            } while (changedTag);*/
 
             var res = new List<ImageData>();
 
-            foreach ( var tagName in tagsToFind )
-                res = mMosaic.Where( p => p.tags.Any( tag => tag.Equals( tagName ) ) ).ToList();
+            foreach (var tagName in tagsToFind)
+                res.AddRange(mMosaic.Where(p => p.tags.Any(tag => tag == tagName)).ToList());
 
-            foreach (var r in res)
-                foreach (var tagName in tagsToAvoid)
-                    if (r.tags.Contains(tagName))
-                        res.Remove(r);
+            res = res.Distinct().ToList();
+
+            foreach (var negationTagName in tagsToAvoid)
+                res = res.Where(p => p.tags.All(tag => tag != negationTagName)).ToList();
 
             return res;
         }
@@ -486,7 +488,24 @@ namespace AppliPhoto
         private void SearchButton_Click(object sender, EventArgs e)
         {
             if(textBox_recherche.Text != "" && !tag_recherches.Contains(textBox_recherche.Text))
-                tag_recherches.Add(textBox_recherche.Text);
+            {
+                Tag t = mTagList.Find(delegate (Tag ta) { return ta.name == textBox_recherche.Text; });
+                if (t != null)
+                    {
+                    
+                    foreach(String sstag in t.tags)
+                    {
+                        tag_recherches.Add(sstag);
+                    }
+                    tag_recherches.Add(textBox_recherche.Text);
+                }
+                else
+                {
+                    tag_recherches.Add(textBox_recherche.Text);
+                }
+                    
+            }
+                
             if (tag_retirer.Contains(textBox_recherche.Text))
                 tag_retirer.Remove(textBox_recherche.Text);
 
@@ -506,14 +525,21 @@ namespace AppliPhoto
             foreach (string tag in tag_retirer)
             {
                 var lab = new TagViewRecherche(tag, this,0);
-
                 flowLayoutPanel_retirer.Controls.Add(lab);
             }
             textBox_retirer.Text = "";
 
+            update_mosaic_recherche();
+
+        }
+
+        public void update_mosaic_recherche()
+        {
             flowLayoutPanel_mosaic_recherche.Controls.Clear();
+            mMosaicRecherche.Clear();
             List<ImageData> images_recherche = SeekTagThroughMosaic(tag_recherches, tag_retirer);
-            foreach(var im in images_recherche)
+
+            foreach (ImageData im in images_recherche)
             {
                 PictureBox picture = new PictureBox
                 {
@@ -522,12 +548,10 @@ namespace AppliPhoto
                     SizeMode = PictureBoxSizeMode.Zoom,
                     ImageLocation = im.fileName
                 };
-
+                mMosaicRecherche.Add(im);
                 picture.MouseClick += new MouseEventHandler(PictureClick);
                 flowLayoutPanel_mosaic_recherche.Controls.Add(picture);
             }
-            //flowLayoutPanel_mosaic_recherche.Visible = true;
-            //mMosaic = new List<ImageData>();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
