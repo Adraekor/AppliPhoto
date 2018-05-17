@@ -27,6 +27,8 @@ namespace AppliPhoto
         private List<Tag> mTagList;
         private TreeView mTagTree = new TreeView();
 
+        private int mCurrentPage = 0;
+
         private const string kmTempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string kmLocalImageDirectory = @"c:\monApplicationPhoto\Images\";
         private const string kmMetadataStore = @"c:\monApplicationPhoto\Images\metadata.json";
@@ -90,9 +92,17 @@ namespace AppliPhoto
 
             TagListSplit.Controls.Add(mTagTree);
 
-            foreach (var picture in mMosaic)
+            UpdatePageCounter();
+            int loadLimit;
+
+            if (mMosaic.Count < mCurrentPage * 100 + 49)
+                loadLimit = mMosaic.Count;
+            else
+                loadLimit = mCurrentPage * 100 + 49;
+
+            for (var i = mCurrentPage* 100; i < loadLimit; ++i)
             {
-                var fileName = picture.fileName;
+                var fileName = mMosaic[ i ].fileName;
                 if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
                  || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
                  || fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
@@ -102,6 +112,11 @@ namespace AppliPhoto
                 }
             }
             Test();
+        }
+
+        private void UpdatePageCounter()
+        {
+            PageLabel.Text = "" + (mCurrentPage + 1);
         }
 
         private void LoadTagHierarchy()
@@ -226,37 +241,6 @@ namespace AppliPhoto
 
         private List<ImageData> SeekTagThroughMosaic( List<string> tagsToFind, List<string> tagsToAvoid )
         {
-            //bool changedTag;
-            /*do
-            {
-                changedTag = false;
-                for( int i = 0; i < tagsToFind.Count; ++i)
-                {
-                    foreach( var tagName in mTagList )
-                    {
-                        if (tagName.name == tagsToFind[ i ])
-                        {
-                            changedTag = true;
-                            tagsToFind.Remove(tagsToFind[ i ]);
-                            tagsToFind.AddRange(tagName.tags);
-                        }
-                    }
-                }
-
-                for (int i = 0; i < tagsToAvoid.Count; ++i)
-                {
-                    foreach (var tagName in mTagList)
-                    {
-                        if (tagName.name == tagsToAvoid[ i ])
-                        {
-                            changedTag = true;
-                            tagsToAvoid.Remove(tagsToAvoid[ i ]);
-                            tagsToAvoid.AddRange(tagName.tags);
-                        }
-                    }
-                }
-            } while (changedTag);*/
-
             var res = new List<ImageData>();
 
             foreach (var tagName in tagsToFind)
@@ -491,8 +475,7 @@ namespace AppliPhoto
             {
                 Tag t = mTagList.Find(delegate (Tag ta) { return ta.name == textBox_recherche.Text; });
                 if (t != null)
-                    {
-                    
+                {
                     foreach(String sstag in t.tags)
                     {
                         tag_recherches.Add(sstag);
@@ -629,6 +612,51 @@ namespace AppliPhoto
         {
             tag_retirer.Clear();
             UpdateSearchList();
+        }
+
+        private void RightArrowPage_Click(object sender, EventArgs e)
+        {
+            if(mMosaic.Count/50 > mCurrentPage)
+            {
+                ++mCurrentPage;
+                UpdatePageCounter();
+                LoadPageImage();
+            }
+        }
+
+        private void LeftArrowPage_Click(object sender, EventArgs e)
+        {
+            if( mCurrentPage > 0)
+            {
+                --mCurrentPage;
+                UpdatePageCounter();
+                LoadPageImage();
+            }
+        }
+
+        private void LoadPageImage()
+        {
+            int loadLimit;
+
+            if (mMosaic.Count < mCurrentPage * 50 + 49)
+                loadLimit = mMosaic.Count;
+            else
+                loadLimit = mCurrentPage * 50 + 49;
+
+            mosaicLayout.Controls.Clear();
+
+
+            for (var i = mCurrentPage * 50; i < loadLimit; ++i)
+            {
+                var fileName = mMosaic[i].fileName;
+                if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+                 || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
+                 || fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
+                 || fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                {
+                    SetAndAddPictureToMosaicLayout(fileName);
+                }
+            }
         }
     }
 }

@@ -40,6 +40,7 @@
             this.soloImageLayout = new System.Windows.Forms.Panel();
             this.tagPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayout_mosaic = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel_mosaic_recherche = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel_recherche = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel_retirer = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel_recherche = new System.Windows.Forms.FlowLayoutPanel();
@@ -51,8 +52,6 @@
             this.textBox_retirer = new System.Windows.Forms.TextBox();
             this.button_retirer = new System.Windows.Forms.Button();
             this.button_vider_retirer = new System.Windows.Forms.Button();
-            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutPanel_mosaic_recherche = new System.Windows.Forms.FlowLayoutPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TagListImagesSplit = new System.Windows.Forms.TableLayoutPanel();
@@ -61,6 +60,12 @@
             this.AddSubTag = new System.Windows.Forms.Button();
             this.TreeViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.MosaicPageSplit = new System.Windows.Forms.TableLayoutPanel();
+            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.PagePanel = new System.Windows.Forms.Panel();
+            this.LeftArrowPage = new System.Windows.Forms.PictureBox();
+            this.RightArrowPage = new System.Windows.Forms.PictureBox();
+            this.PageLabel = new System.Windows.Forms.Label();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.TagSoloImageSplit.SuspendLayout();
@@ -72,6 +77,10 @@
             this.TagListImagesSplit.SuspendLayout();
             this.TagListSplit.SuspendLayout();
             this.TreeViewMenu.SuspendLayout();
+            this.MosaicPageSplit.SuspendLayout();
+            this.PagePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LeftArrowPage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RightArrowPage)).BeginInit();
             this.SuspendLayout();
             // 
             // toolbar
@@ -175,8 +184,8 @@
             this.tableLayout_mosaic.ColumnCount = 1;
             this.tableLayout_mosaic.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayout_mosaic.Controls.Add(this.flowLayoutPanel_mosaic_recherche, 0, 2);
-            this.tableLayout_mosaic.Controls.Add(this.mosaicLayout, 0, 1);
             this.tableLayout_mosaic.Controls.Add(this.tableLayoutPanel_recherche, 0, 0);
+            this.tableLayout_mosaic.Controls.Add(this.MosaicPageSplit, 0, 1);
             this.tableLayout_mosaic.Location = new System.Drawing.Point(3, 3);
             this.tableLayout_mosaic.Name = "tableLayout_mosaic";
             this.tableLayout_mosaic.RowCount = 3;
@@ -185,6 +194,15 @@
             this.tableLayout_mosaic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 312F));
             this.tableLayout_mosaic.Size = new System.Drawing.Size(570, 704);
             this.tableLayout_mosaic.TabIndex = 2;
+            // 
+            // flowLayoutPanel_mosaic_recherche
+            // 
+            this.flowLayoutPanel_mosaic_recherche.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.flowLayoutPanel_mosaic_recherche.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel_mosaic_recherche.Location = new System.Drawing.Point(3, 394);
+            this.flowLayoutPanel_mosaic_recherche.Name = "flowLayoutPanel_mosaic_recherche";
+            this.flowLayoutPanel_mosaic_recherche.Size = new System.Drawing.Size(564, 307);
+            this.flowLayoutPanel_mosaic_recherche.TabIndex = 6;
             // 
             // tableLayoutPanel_recherche
             // 
@@ -318,27 +336,6 @@
             this.button_vider_retirer.UseVisualStyleBackColor = true;
             this.button_vider_retirer.Click += new System.EventHandler(this.button_vider_retirer_Click);
             // 
-            // mosaicLayout
-            // 
-            this.mosaicLayout.AutoScroll = true;
-            this.mosaicLayout.AutoSize = true;
-            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mosaicLayout.BackColor = System.Drawing.SystemColors.Control;
-            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mosaicLayout.Location = new System.Drawing.Point(3, 125);
-            this.mosaicLayout.Name = "mosaicLayout";
-            this.mosaicLayout.Size = new System.Drawing.Size(564, 263);
-            this.mosaicLayout.TabIndex = 0;
-            // 
-            // flowLayoutPanel_mosaic_recherche
-            // 
-            this.flowLayoutPanel_mosaic_recherche.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.flowLayoutPanel_mosaic_recherche.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel_mosaic_recherche.Location = new System.Drawing.Point(3, 394);
-            this.flowLayoutPanel_mosaic_recherche.Name = "flowLayoutPanel_mosaic_recherche";
-            this.flowLayoutPanel_mosaic_recherche.Size = new System.Drawing.Size(564, 307);
-            this.flowLayoutPanel_mosaic_recherche.TabIndex = 6;
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -420,6 +417,80 @@
             this.effacerToolStripMenuItem1.Text = "Effacer";
             this.effacerToolStripMenuItem1.Click += new System.EventHandler(this.DeleteTagFromTreeView_Click);
             // 
+            // MosaicPageSplit
+            // 
+            this.MosaicPageSplit.ColumnCount = 1;
+            this.MosaicPageSplit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MosaicPageSplit.Controls.Add(this.mosaicLayout, 0, 0);
+            this.MosaicPageSplit.Controls.Add(this.PagePanel, 0, 1);
+            this.MosaicPageSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MosaicPageSplit.Location = new System.Drawing.Point(3, 125);
+            this.MosaicPageSplit.Name = "MosaicPageSplit";
+            this.MosaicPageSplit.RowCount = 2;
+            this.MosaicPageSplit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MosaicPageSplit.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.MosaicPageSplit.Size = new System.Drawing.Size(564, 263);
+            this.MosaicPageSplit.TabIndex = 7;
+            // 
+            // mosaicLayout
+            // 
+            this.mosaicLayout.AutoScroll = true;
+            this.mosaicLayout.AutoSize = true;
+            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mosaicLayout.BackColor = System.Drawing.SystemColors.Control;
+            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
+            this.mosaicLayout.Name = "mosaicLayout";
+            this.mosaicLayout.Size = new System.Drawing.Size(558, 221);
+            this.mosaicLayout.TabIndex = 1;
+            // 
+            // PagePanel
+            // 
+            this.PagePanel.AutoSize = true;
+            this.PagePanel.Controls.Add(this.PageLabel);
+            this.PagePanel.Controls.Add(this.RightArrowPage);
+            this.PagePanel.Controls.Add(this.LeftArrowPage);
+            this.PagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PagePanel.Location = new System.Drawing.Point(3, 230);
+            this.PagePanel.Name = "PagePanel";
+            this.PagePanel.Size = new System.Drawing.Size(558, 30);
+            this.PagePanel.TabIndex = 2;
+            // 
+            // LeftArrowPage
+            // 
+            this.LeftArrowPage.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.LeftArrowPage.ImageLocation = "asset/left_arrow.png";
+            this.LeftArrowPage.Location = new System.Drawing.Point(253, 0);
+            this.LeftArrowPage.Name = "LeftArrowPage";
+            this.LeftArrowPage.Size = new System.Drawing.Size(15, 27);
+            this.LeftArrowPage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.LeftArrowPage.TabIndex = 0;
+            this.LeftArrowPage.TabStop = false;
+            this.LeftArrowPage.Click += new System.EventHandler(this.LeftArrowPage_Click);
+            // 
+            // RightArrowPage
+            // 
+            this.RightArrowPage.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.RightArrowPage.ImageLocation = "asset/right_arrow.png";
+            this.RightArrowPage.Location = new System.Drawing.Point(300, 0);
+            this.RightArrowPage.Name = "RightArrowPage";
+            this.RightArrowPage.Size = new System.Drawing.Size(13, 27);
+            this.RightArrowPage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.RightArrowPage.TabIndex = 1;
+            this.RightArrowPage.TabStop = false;
+            this.RightArrowPage.Click += new System.EventHandler(this.RightArrowPage_Click);
+            // 
+            // PageLabel
+            // 
+            this.PageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.PageLabel.AutoSize = true;
+            this.PageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PageLabel.Location = new System.Drawing.Point(274, 0);
+            this.PageLabel.Name = "PageLabel";
+            this.PageLabel.Size = new System.Drawing.Size(0, 25);
+            this.PageLabel.TabIndex = 2;
+            this.PageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -447,6 +518,12 @@
             this.TagListImagesSplit.ResumeLayout(false);
             this.TagListSplit.ResumeLayout(false);
             this.TreeViewMenu.ResumeLayout(false);
+            this.MosaicPageSplit.ResumeLayout(false);
+            this.MosaicPageSplit.PerformLayout();
+            this.PagePanel.ResumeLayout(false);
+            this.PagePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LeftArrowPage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RightArrowPage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -464,7 +541,6 @@
         private System.Windows.Forms.Panel soloImageLayout;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.FlowLayoutPanel tagPanel;
-        private System.Windows.Forms.FlowLayoutPanel mosaicLayout;
         private System.Windows.Forms.Button button_Recherche;
         private System.Windows.Forms.TextBox textBox_recherche;
         private System.Windows.Forms.ToolStripMenuItem effacerToolStripMenuItem;
@@ -485,5 +561,11 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_mosaic_recherche;
         private System.Windows.Forms.Button button_vider_recherche;
         private System.Windows.Forms.Button button_vider_retirer;
+        private System.Windows.Forms.TableLayoutPanel MosaicPageSplit;
+        private System.Windows.Forms.FlowLayoutPanel mosaicLayout;
+        private System.Windows.Forms.Panel PagePanel;
+        private System.Windows.Forms.Label PageLabel;
+        private System.Windows.Forms.PictureBox RightArrowPage;
+        private System.Windows.Forms.PictureBox LeftArrowPage;
     }
 }
