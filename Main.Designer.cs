@@ -52,6 +52,12 @@
             this.textBox_retirer = new System.Windows.Forms.TextBox();
             this.button_retirer = new System.Windows.Forms.Button();
             this.button_vider_retirer = new System.Windows.Forms.Button();
+            this.MosaicPageSplit = new System.Windows.Forms.TableLayoutPanel();
+            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.PagePanel = new System.Windows.Forms.Panel();
+            this.PageLabel = new System.Windows.Forms.Label();
+            this.RightArrowPage = new System.Windows.Forms.PictureBox();
+            this.LeftArrowPage = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TagListImagesSplit = new System.Windows.Forms.TableLayoutPanel();
@@ -60,12 +66,6 @@
             this.AddSubTag = new System.Windows.Forms.Button();
             this.TreeViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.MosaicPageSplit = new System.Windows.Forms.TableLayoutPanel();
-            this.mosaicLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.PagePanel = new System.Windows.Forms.Panel();
-            this.LeftArrowPage = new System.Windows.Forms.PictureBox();
-            this.RightArrowPage = new System.Windows.Forms.PictureBox();
-            this.PageLabel = new System.Windows.Forms.Label();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.TagSoloImageSplit.SuspendLayout();
@@ -73,14 +73,14 @@
             this.tableLayoutPanel_recherche.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.MosaicPageSplit.SuspendLayout();
+            this.PagePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RightArrowPage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LeftArrowPage)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.TagListImagesSplit.SuspendLayout();
             this.TagListSplit.SuspendLayout();
             this.TreeViewMenu.SuspendLayout();
-            this.MosaicPageSplit.SuspendLayout();
-            this.PagePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LeftArrowPage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RightArrowPage)).BeginInit();
             this.SuspendLayout();
             // 
             // toolbar
@@ -313,6 +313,7 @@
             this.textBox_retirer.Name = "textBox_retirer";
             this.textBox_retirer.Size = new System.Drawing.Size(105, 20);
             this.textBox_retirer.TabIndex = 2;
+            this.textBox_retirer.TextChanged += new System.EventHandler(this.textBox_retirer_TextChanged);
             // 
             // button_retirer
             // 
@@ -335,6 +336,80 @@
             this.button_vider_retirer.Text = "Vider";
             this.button_vider_retirer.UseVisualStyleBackColor = true;
             this.button_vider_retirer.Click += new System.EventHandler(this.button_vider_retirer_Click);
+            // 
+            // MosaicPageSplit
+            // 
+            this.MosaicPageSplit.ColumnCount = 1;
+            this.MosaicPageSplit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MosaicPageSplit.Controls.Add(this.mosaicLayout, 0, 0);
+            this.MosaicPageSplit.Controls.Add(this.PagePanel, 0, 1);
+            this.MosaicPageSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MosaicPageSplit.Location = new System.Drawing.Point(3, 125);
+            this.MosaicPageSplit.Name = "MosaicPageSplit";
+            this.MosaicPageSplit.RowCount = 2;
+            this.MosaicPageSplit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MosaicPageSplit.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.MosaicPageSplit.Size = new System.Drawing.Size(564, 263);
+            this.MosaicPageSplit.TabIndex = 7;
+            // 
+            // mosaicLayout
+            // 
+            this.mosaicLayout.AutoScroll = true;
+            this.mosaicLayout.AutoSize = true;
+            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mosaicLayout.BackColor = System.Drawing.SystemColors.Control;
+            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
+            this.mosaicLayout.Name = "mosaicLayout";
+            this.mosaicLayout.Size = new System.Drawing.Size(558, 221);
+            this.mosaicLayout.TabIndex = 1;
+            // 
+            // PagePanel
+            // 
+            this.PagePanel.AutoSize = true;
+            this.PagePanel.Controls.Add(this.PageLabel);
+            this.PagePanel.Controls.Add(this.RightArrowPage);
+            this.PagePanel.Controls.Add(this.LeftArrowPage);
+            this.PagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PagePanel.Location = new System.Drawing.Point(3, 230);
+            this.PagePanel.Name = "PagePanel";
+            this.PagePanel.Size = new System.Drawing.Size(558, 30);
+            this.PagePanel.TabIndex = 2;
+            // 
+            // PageLabel
+            // 
+            this.PageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.PageLabel.AutoSize = true;
+            this.PageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PageLabel.Location = new System.Drawing.Point(274, 0);
+            this.PageLabel.Name = "PageLabel";
+            this.PageLabel.Size = new System.Drawing.Size(0, 25);
+            this.PageLabel.TabIndex = 2;
+            this.PageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RightArrowPage
+            // 
+            this.RightArrowPage.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.RightArrowPage.ImageLocation = "asset/right_arrow.png";
+            this.RightArrowPage.Location = new System.Drawing.Point(300, 0);
+            this.RightArrowPage.Name = "RightArrowPage";
+            this.RightArrowPage.Size = new System.Drawing.Size(13, 27);
+            this.RightArrowPage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.RightArrowPage.TabIndex = 1;
+            this.RightArrowPage.TabStop = false;
+            this.RightArrowPage.Click += new System.EventHandler(this.RightArrowPage_Click);
+            // 
+            // LeftArrowPage
+            // 
+            this.LeftArrowPage.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.LeftArrowPage.ImageLocation = "asset/left_arrow.png";
+            this.LeftArrowPage.Location = new System.Drawing.Point(253, 0);
+            this.LeftArrowPage.Name = "LeftArrowPage";
+            this.LeftArrowPage.Size = new System.Drawing.Size(15, 27);
+            this.LeftArrowPage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.LeftArrowPage.TabIndex = 0;
+            this.LeftArrowPage.TabStop = false;
+            this.LeftArrowPage.Click += new System.EventHandler(this.LeftArrowPage_Click);
             // 
             // contextMenuStrip1
             // 
@@ -417,80 +492,6 @@
             this.effacerToolStripMenuItem1.Text = "Effacer";
             this.effacerToolStripMenuItem1.Click += new System.EventHandler(this.DeleteTagFromTreeView_Click);
             // 
-            // MosaicPageSplit
-            // 
-            this.MosaicPageSplit.ColumnCount = 1;
-            this.MosaicPageSplit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MosaicPageSplit.Controls.Add(this.mosaicLayout, 0, 0);
-            this.MosaicPageSplit.Controls.Add(this.PagePanel, 0, 1);
-            this.MosaicPageSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MosaicPageSplit.Location = new System.Drawing.Point(3, 125);
-            this.MosaicPageSplit.Name = "MosaicPageSplit";
-            this.MosaicPageSplit.RowCount = 2;
-            this.MosaicPageSplit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MosaicPageSplit.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.MosaicPageSplit.Size = new System.Drawing.Size(564, 263);
-            this.MosaicPageSplit.TabIndex = 7;
-            // 
-            // mosaicLayout
-            // 
-            this.mosaicLayout.AutoScroll = true;
-            this.mosaicLayout.AutoSize = true;
-            this.mosaicLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.mosaicLayout.BackColor = System.Drawing.SystemColors.Control;
-            this.mosaicLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mosaicLayout.Location = new System.Drawing.Point(3, 3);
-            this.mosaicLayout.Name = "mosaicLayout";
-            this.mosaicLayout.Size = new System.Drawing.Size(558, 221);
-            this.mosaicLayout.TabIndex = 1;
-            // 
-            // PagePanel
-            // 
-            this.PagePanel.AutoSize = true;
-            this.PagePanel.Controls.Add(this.PageLabel);
-            this.PagePanel.Controls.Add(this.RightArrowPage);
-            this.PagePanel.Controls.Add(this.LeftArrowPage);
-            this.PagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PagePanel.Location = new System.Drawing.Point(3, 230);
-            this.PagePanel.Name = "PagePanel";
-            this.PagePanel.Size = new System.Drawing.Size(558, 30);
-            this.PagePanel.TabIndex = 2;
-            // 
-            // LeftArrowPage
-            // 
-            this.LeftArrowPage.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.LeftArrowPage.ImageLocation = "asset/left_arrow.png";
-            this.LeftArrowPage.Location = new System.Drawing.Point(253, 0);
-            this.LeftArrowPage.Name = "LeftArrowPage";
-            this.LeftArrowPage.Size = new System.Drawing.Size(15, 27);
-            this.LeftArrowPage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.LeftArrowPage.TabIndex = 0;
-            this.LeftArrowPage.TabStop = false;
-            this.LeftArrowPage.Click += new System.EventHandler(this.LeftArrowPage_Click);
-            // 
-            // RightArrowPage
-            // 
-            this.RightArrowPage.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.RightArrowPage.ImageLocation = "asset/right_arrow.png";
-            this.RightArrowPage.Location = new System.Drawing.Point(300, 0);
-            this.RightArrowPage.Name = "RightArrowPage";
-            this.RightArrowPage.Size = new System.Drawing.Size(13, 27);
-            this.RightArrowPage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.RightArrowPage.TabIndex = 1;
-            this.RightArrowPage.TabStop = false;
-            this.RightArrowPage.Click += new System.EventHandler(this.RightArrowPage_Click);
-            // 
-            // PageLabel
-            // 
-            this.PageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.PageLabel.AutoSize = true;
-            this.PageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PageLabel.Location = new System.Drawing.Point(274, 0);
-            this.PageLabel.Name = "PageLabel";
-            this.PageLabel.Size = new System.Drawing.Size(0, 25);
-            this.PageLabel.TabIndex = 2;
-            this.PageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -514,16 +515,16 @@
             this.flowLayoutPanel1.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
-            this.TagListImagesSplit.ResumeLayout(false);
-            this.TagListSplit.ResumeLayout(false);
-            this.TreeViewMenu.ResumeLayout(false);
             this.MosaicPageSplit.ResumeLayout(false);
             this.MosaicPageSplit.PerformLayout();
             this.PagePanel.ResumeLayout(false);
             this.PagePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LeftArrowPage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RightArrowPage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LeftArrowPage)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
+            this.TagListImagesSplit.ResumeLayout(false);
+            this.TagListSplit.ResumeLayout(false);
+            this.TreeViewMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

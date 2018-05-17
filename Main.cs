@@ -92,6 +92,9 @@ namespace AppliPhoto
 
             TagListSplit.Controls.Add(mTagTree);
 
+            textBox_recherche.KeyDown += Search_KeyDown;
+            textBox_retirer.KeyDown += Remove_KeyDown;
+
             UpdatePageCounter();
             int loadLimit;
 
@@ -112,6 +115,18 @@ namespace AppliPhoto
                 }
             }
             Test();
+        }
+
+        private void Remove_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                RemoveSearchTag();
+        }
+
+        private void Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if( e.KeyCode == Keys.Enter )
+                AddSearchTag();
         }
 
         private void UpdatePageCounter()
@@ -244,12 +259,12 @@ namespace AppliPhoto
             var res = new List<ImageData>();
 
             foreach (var tagName in tagsToFind)
-                res.AddRange(mMosaic.Where(p => p.tags.Any(tag => tag == tagName)).ToList());
+                res.AddRange(mMosaic.Where(p => p.tags.Any(tag => tag.Equals( tagName, StringComparison.OrdinalIgnoreCase))).ToList());
 
             res = res.Distinct().ToList();
 
             foreach (var negationTagName in tagsToAvoid)
-                res = res.Where(p => p.tags.All(tag => tag != negationTagName)).ToList();
+                res = res.Where(p => p.tags.All(tag => !tag.Equals(negationTagName, StringComparison.OrdinalIgnoreCase))).ToList();
 
             return res;
         }
@@ -368,12 +383,16 @@ namespace AppliPhoto
         {
             UpdateTags();
 
+            ((PictureBox)mosaicLayout.Controls[mIndexCloneInMosaic]).BorderStyle = BorderStyle.None;
+
             if ( mIndexCloneInMosaic == -1 )
                 return;
             if ( mIndexCloneInMosaic == 0 )
                 mIndexCloneInMosaic = mMosaic.Count - 1;
             else
-                mIndexCloneInMosaic -= 1;
+                --mIndexCloneInMosaic;
+
+            ((PictureBox)mosaicLayout.Controls[mIndexCloneInMosaic]).BorderStyle = BorderStyle.FixedSingle;
 
             mClone.ImageLocation = mMosaic[ mIndexCloneInMosaic ].fileName;
 
@@ -389,7 +408,7 @@ namespace AppliPhoto
             if (mIndexCloneInMosaic == mMosaic.Count - 1)
                 mIndexCloneInMosaic = 0;
             else
-                mIndexCloneInMosaic += 1;
+                ++mIndexCloneInMosaic;
 
             mClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
             LoadPictureTags();
@@ -407,16 +426,23 @@ namespace AppliPhoto
                 {
                     foreach (var fileName in FileSelector.FileNames)
                     {
-                        var destination = kmLocalImageDirectory + Path.GetFileName(fileName);
-                        if (!File.Exists(destination))
+                        if (    fileName.EndsWith(".jpg",  StringComparison.OrdinalIgnoreCase)
+                             || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
+                             || fileName.EndsWith(".gif",  StringComparison.OrdinalIgnoreCase)
+                             || fileName.EndsWith(".png",  StringComparison.OrdinalIgnoreCase)
+                             && !fileName.StartsWith("."))
                         {
-                            File.Copy(fileName, destination);
-                            SetAndAddPictureToMosaicLayout(destination);
+                            var destination = kmLocalImageDirectory + Path.GetFileName(fileName);
+                            if (!File.Exists(destination))
+                            {
+                                File.Copy(fileName, destination);
 
-                            var imageData = new ImageData(destination, new List<String>());
-                            mMosaic.Add(imageData);
+                                var imageData = new ImageData(destination, new List<String>());
+                                mMosaic.Add(imageData);
+                            }
                         }
                     }
+                    LoadPageImage();
                 }
             }
         }
@@ -432,7 +458,8 @@ namespace AppliPhoto
                     var files = Directory.GetFiles(browserSelector.SelectedPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
                                                                                                                              || s.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
                                                                                                                              || s.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
-                                                                                                                             || s.EndsWith(".png", StringComparison.OrdinalIgnoreCase)).ToArray();
+                                                                                                                             || s.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                                                                                                                             && !s.StartsWith(".")).ToArray();
                     var importedFiles = 0;
                     foreach (var fileName in files)
                     {
@@ -440,13 +467,14 @@ namespace AppliPhoto
                         if (!File.Exists(destination))
                         {
                             File.Copy(fileName, destination);
-                            SetAndAddPictureToMosaicLayout(destination);
                             ++importedFiles;
 
                             var imageData = new ImageData(destination, new List<String>());
                             mMosaic.Add(imageData);
                         }
                     }
+
+                    LoadPageImage();
 
                     MessageBox.Show("Nombre de fichiers importés : " + importedFiles.ToString() + " sur un total de " + files.Length.ToString() + " trouvés.", "Rapport");
                 }
@@ -469,14 +497,15 @@ namespace AppliPhoto
 
         }
 
-        private void SearchButton_Click(object sender, EventArgs e)
+        private void AddSearchTag()
         {
-            if(textBox_recherche.Text != "" && !tag_recherches.Contains(textBox_recherche.Text))
+            if (textBox_recherche.Text != "" && !tag_recherches.Contains(textBox_recherche.Text))
             {
-                Tag t = mTagList.Find(delegate (Tag ta) { return ta.name == textBox_recherche.Text; });
+                Tag t = mTagList.Find(delegate (Tag ta) { return ta.name.Equals( textBox_recherche.Text, StringComparison.OrdinalIgnoreCase); });
+
                 if (t != null)
                 {
-                    foreach(String sstag in t.tags)
+                    foreach (String sstag in t.tags)
                     {
                         tag_recherches.Add(sstag);
                     }
@@ -486,13 +515,19 @@ namespace AppliPhoto
                 {
                     tag_recherches.Add(textBox_recherche.Text);
                 }
-                    
+
             }
-                
+
             if (tag_retirer.Contains(textBox_recherche.Text))
                 tag_retirer.Remove(textBox_recherche.Text);
 
             UpdateSearchList();
+        }
+
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            AddSearchTag();
         }
 
         private void UpdateSearchList()
@@ -537,7 +572,7 @@ namespace AppliPhoto
             }
         }
 
-        private void RemoveButton_Click(object sender, EventArgs e)
+        private void RemoveSearchTag()
         {
             if (textBox_retirer.Text != "" && !tag_retirer.Contains(textBox_retirer.Text))
                 tag_retirer.Add(textBox_retirer.Text);
@@ -545,6 +580,11 @@ namespace AppliPhoto
                 tag_recherches.Remove(textBox_retirer.Text);
 
             UpdateSearchList();
+        }
+
+        private void RemoveButton_Click(object sender, EventArgs e)
+        {
+            RemoveSearchTag();
         }
 
         private void DeleteTagFromTreeView_Click(object sender, EventArgs e)
@@ -645,18 +685,13 @@ namespace AppliPhoto
 
             mosaicLayout.Controls.Clear();
 
-
             for (var i = mCurrentPage * 50; i < loadLimit; ++i)
-            {
-                var fileName = mMosaic[i].fileName;
-                if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
-                 || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
-                 || fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
-                 || fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                {
-                    SetAndAddPictureToMosaicLayout(fileName);
-                }
-            }
+                SetAndAddPictureToMosaicLayout(mMosaic[ i ].fileName);
+        }
+
+        private void textBox_retirer_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
