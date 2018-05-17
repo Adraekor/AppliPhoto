@@ -66,6 +66,7 @@
             this.AddSubTag = new System.Windows.Forms.Button();
             this.TreeViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.effacerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.CloneZoom = new System.Windows.Forms.Panel();
             this.toolbar.SuspendLayout();
             this.SplitScreen.SuspendLayout();
             this.TagSoloImageSplit.SuspendLayout();
@@ -168,6 +169,7 @@
             // tagPanel
             // 
             this.tagPanel.AutoScroll = true;
+            this.tagPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tagPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tagPanel.Location = new System.Drawing.Point(3, 355);
             this.tagPanel.Name = "tagPanel";
@@ -275,16 +277,16 @@
             this.button_Recherche.AutoSize = true;
             this.button_Recherche.Location = new System.Drawing.Point(114, 3);
             this.button_Recherche.Name = "button_Recherche";
-            this.button_Recherche.Size = new System.Drawing.Size(92, 23);
+            this.button_Recherche.Size = new System.Drawing.Size(95, 23);
             this.button_Recherche.TabIndex = 1;
-            this.button_Recherche.Text = "Recherche Tag";
+            this.button_Recherche.Text = "Rechercher Tag";
             this.button_Recherche.UseVisualStyleBackColor = true;
             this.button_Recherche.Click += new System.EventHandler(this.SearchButton_Click);
             // 
             // button_vider_recherche
             // 
             this.button_vider_recherche.AutoSize = true;
-            this.button_vider_recherche.Location = new System.Drawing.Point(212, 3);
+            this.button_vider_recherche.Location = new System.Drawing.Point(215, 3);
             this.button_vider_recherche.Name = "button_vider_recherche";
             this.button_vider_recherche.Size = new System.Drawing.Size(41, 23);
             this.button_vider_recherche.TabIndex = 2;
@@ -492,15 +494,27 @@
             this.effacerToolStripMenuItem1.Text = "Effacer";
             this.effacerToolStripMenuItem1.Click += new System.EventHandler(this.DeleteTagFromTreeView_Click);
             // 
+            // CloneZoom
+            // 
+            this.CloneZoom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CloneZoom.Location = new System.Drawing.Point(0, 25);
+            this.CloneZoom.Name = "CloneZoom";
+            this.CloneZoom.Size = new System.Drawing.Size(1362, 716);
+            this.CloneZoom.TabIndex = 10;
+            this.CloneZoom.Visible = false;
+            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.ClientSize = new System.Drawing.Size(1362, 741);
+            this.Controls.Add(this.CloneZoom);
             this.Controls.Add(this.TagListImagesSplit);
             this.Controls.Add(this.toolbar);
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(825, 500);
             this.Name = "Main";
             this.Text = "Gestion de photos";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Main_Load);
             this.toolbar.ResumeLayout(false);
             this.toolbar.PerformLayout();
@@ -568,5 +582,6 @@
         private System.Windows.Forms.Label PageLabel;
         private System.Windows.Forms.PictureBox RightArrowPage;
         private System.Windows.Forms.PictureBox LeftArrowPage;
+        private System.Windows.Forms.Panel CloneZoom;
     }
 }

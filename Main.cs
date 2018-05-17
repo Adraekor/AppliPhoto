@@ -14,6 +14,7 @@ namespace AppliPhoto
         private List<ImageData> mMosaic = new List<ImageData>();
         private List<ImageData> mMosaicRecherche = new List<ImageData>();
         private PictureBox mClone;
+        private PictureBox mZoomedClone;
         private PictureBox mImageToBeDeleted;
         private PictureBox mLastSelectedPicture;
         private int mIndexCloneInMosaic = -1;
@@ -28,6 +29,7 @@ namespace AppliPhoto
         private TreeView mTagTree = new TreeView();
 
         private int mCurrentPage = 0;
+        private bool mZoom = false;
 
         private const string kmTempFileName = @"C:\monApplicationPhoto\Images\@@@temp@@@.jpg";
         private const string kmLocalImageDirectory = @"c:\monApplicationPhoto\Images\";
@@ -43,6 +45,7 @@ namespace AppliPhoto
         private void Main_Load(object sender, EventArgs e)
         {
             mLastSelectedPicture = new PictureBox();
+            KeyDown += Main_KeyDown;
 
             LoadAllImportedImageMetadata();
             LoadTagHierarchy();
@@ -64,6 +67,7 @@ namespace AppliPhoto
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Anchor = AnchorStyles.None
             };
+            mClone.Click += Clone_Click;
             soloImageLayout.Controls.Add(mClone);
 
             var leftArrow = new PictureBox
@@ -73,7 +77,7 @@ namespace AppliPhoto
                 Anchor = AnchorStyles.Left
             };
             leftArrow.MouseClick += new MouseEventHandler(LeftImageButton_Click);
-            leftArrow.Location = new Point(0, (soloImageLayout.Height - leftArrow.Height) / 4);
+            leftArrow.Location = new Point(0, (soloImageLayout.Height - leftArrow.Height) / 2);
 
             var rightArrow = new PictureBox
             {
@@ -82,7 +86,9 @@ namespace AppliPhoto
                 Anchor = AnchorStyles.Right,
             };
             rightArrow.MouseClick += new MouseEventHandler(RightImageButton_Click);
-            rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 4);
+            rightArrow.Location = new Point(soloImageLayout.Width - rightArrow.Width, (soloImageLayout.Height - leftArrow.Height) / 2);
+
+            InitializeZoomPanel();
 
             mTagTree.Dock = DockStyle.Fill;
             mTagTree.MouseClick += TagTree_Click;
@@ -104,17 +110,92 @@ namespace AppliPhoto
                 loadLimit = mCurrentPage * 100 + 49;
 
             for (var i = mCurrentPage* 100; i < loadLimit; ++i)
+                SetAndAddPictureToMosaicLayout(mMosaic[i].fileName);
+        }
+
+        private void InitializeZoomPanel()
+        {
+            mZoomedClone = new PictureBox
             {
-                var fileName = mMosaic[ i ].fileName;
-                if (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
-                 || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
-                 || fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)
-                 || fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                {
-                    SetAndAddPictureToMosaicLayout(fileName);
-                }
+                Anchor = (AnchorStyles.Top | AnchorStyles.Left),
+                SizeMode = PictureBoxSizeMode.Zoom,
+            };
+
+            var leftArrow = new PictureBox
+            {
+                Image = new Bitmap(@"asset\left_arrow.png"),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Left
+            };
+            leftArrow.MouseClick += new MouseEventHandler(LeftImageButton_Click);
+            leftArrow.Location = new Point(0, (CloneZoom.Height - leftArrow.Height) / 2);
+
+            var rightArrow = new PictureBox
+            {
+                Image = new Bitmap(@"asset\right_arrow.png"),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Right,
+            };
+            rightArrow.MouseClick += new MouseEventHandler(RightImageButton_Click);
+            rightArrow.Location = new Point(CloneZoom.Width - rightArrow.Width, (CloneZoom.Height - leftArrow.Height) / 2);
+
+            var leaveButton = new Button
+            {
+                Text = "Quitter le mode zoom",
+                AutoSize = true,
+                Font = new Font("MS Sans Serif", 16, FontStyle.Regular, GraphicsUnit.Point),
+                Anchor = (AnchorStyles.Right | AnchorStyles.Top)
+            };
+            leaveButton.Location = new Point(CloneZoom.Width - leaveButton.Width, 0);
+            leaveButton.Click += LeaveButton_Click;
+
+            CloneZoom.Controls.Add(leftArrow);
+            CloneZoom.Controls.Add(rightArrow);
+            CloneZoom.Controls.Add(leaveButton);
+            CloneZoom.Controls.Add(mZoomedClone);
+        }
+
+        private void LeaveButton_Click(object sender, EventArgs e)
+        {
+            LeaveZoomMode();
+        }
+
+        private void LeaveZoomMode()
+        {
+            CloneZoom.SendToBack();
+            CloneZoom.Visible = false;
+            mZoom = false;
+        }
+
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(mZoom && e.KeyCode == Keys.Escape)
+            {
+                LeaveZoomMode();
             }
-            Test();
+
+            if (e.KeyCode == Keys.Left)
+            {
+                SwitchToLeftImage();
+            }
+
+            if (e.KeyCode == Keys.Right)
+            {
+                SwitchToRightImage();
+            }
+        }
+
+        private void Clone_Click(object sender, EventArgs e)
+        {
+            mZoom = true;
+
+            mZoomedClone.ImageLocation = mClone.ImageLocation;
+            mZoomedClone.Width = 4 * Width / 5;
+            mZoomedClone.Height = Height;
+            mZoomedClone.Left = Width / 2 - mZoomedClone.Width / 2;
+
+            CloneZoom.BringToFront();
+            CloneZoom.Visible = true;
         }
 
         private void Remove_KeyDown(object sender, KeyEventArgs e)
@@ -200,7 +281,7 @@ namespace AppliPhoto
 
         private void AddTagButton(object sender, EventArgs e)
         {
-            var promptValue = Prompt.ShowDialog("Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
+            var promptValue = Prompt.ShowDropDownDialog(mTagList, "Veuillez entrer le nom du tag à ajouter", "Ajout d'un tag");
             if (promptValue.Trim() != "")
             {
                 mMosaic[mIndexCloneInMosaic].AddTag(promptValue);
@@ -249,7 +330,7 @@ namespace AppliPhoto
                 ImageLocation = fileName
             };
 
-            picture.MouseClick += new MouseEventHandler(PictureClick);
+            picture.MouseClick += new MouseEventHandler(Picture_Click);
             mosaicLayout.Controls.Add(picture);
             
         }
@@ -299,11 +380,11 @@ namespace AppliPhoto
         {
             mClone.ImageLocation = clonePath;
             mClone.Width = soloImageLayout.Width / 2;
-            mClone.Height = 3 * soloImageLayout.Height / 4;
+            mClone.Height = soloImageLayout.Height;
             mClone.Location = new Point( ( soloImageLayout.Width - mClone.Width ) / 2, 0 );
         }
 
-        private void PictureClick( object sender, MouseEventArgs e )
+        private void Picture_Click( object sender, MouseEventArgs e )
         {
             if ( e.Button == MouseButtons.Left )
             {
@@ -379,27 +460,25 @@ namespace AppliPhoto
             }
         }
 
-        private void LeftImageButton_Click( object sender, EventArgs e )
+        private void SwitchToLeftImage()
         {
             UpdateTags();
 
-            ((PictureBox)mosaicLayout.Controls[mIndexCloneInMosaic]).BorderStyle = BorderStyle.None;
-
-            if ( mIndexCloneInMosaic == -1 )
+            if (mIndexCloneInMosaic == -1)
                 return;
-            if ( mIndexCloneInMosaic == 0 )
+            if (mIndexCloneInMosaic == 0)
                 mIndexCloneInMosaic = mMosaic.Count - 1;
             else
                 --mIndexCloneInMosaic;
 
-            ((PictureBox)mosaicLayout.Controls[mIndexCloneInMosaic]).BorderStyle = BorderStyle.FixedSingle;
-
-            mClone.ImageLocation = mMosaic[ mIndexCloneInMosaic ].fileName;
+            mClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
+            if (mZoom)
+                mZoomedClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
 
             LoadPictureTags();
         }
 
-        private void RightImageButton_Click(object sender, EventArgs e)
+        private void SwitchToRightImage()
         {
             UpdateTags();
 
@@ -411,7 +490,19 @@ namespace AppliPhoto
                 ++mIndexCloneInMosaic;
 
             mClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
+            if (mZoom)
+                mZoomedClone.ImageLocation = mMosaic[mIndexCloneInMosaic].fileName;
             LoadPictureTags();
+        }
+
+        private void LeftImageButton_Click( object sender, EventArgs e )
+        {
+            SwitchToLeftImage();
+        }
+
+        private void RightImageButton_Click(object sender, EventArgs e)
+        {
+            SwitchToRightImage();
         }
 
         private void ImageImport(object sender, EventArgs e)
@@ -567,7 +658,7 @@ namespace AppliPhoto
                     ImageLocation = im.fileName
                 };
                 mMosaicRecherche.Add(im);
-                picture.MouseClick += new MouseEventHandler(PictureClick);
+                picture.MouseClick += new MouseEventHandler(Picture_Click);
                 flowLayoutPanel_mosaic_recherche.Controls.Add(picture);
             }
         }
@@ -602,7 +693,7 @@ namespace AppliPhoto
 
         private void AddSuperTag_Click(object sender, EventArgs e)
         {
-            var promptValue = Prompt.ShowDialog("Veuillez entrer le nom du super tag à créer", "Ajout d'un super tag");
+            var promptValue = Prompt.ShowTextBoxDialog("Veuillez entrer le nom du super tag à créer", "Ajout d'un super tag");
             if (promptValue.Trim() != "")
             {
                 var i = mTagList.FirstOrDefault(s => s.name == promptValue);
@@ -624,7 +715,7 @@ namespace AppliPhoto
             foreach(var currentSuperTag in mTagList)
                 superTagList.Add(currentSuperTag.name);
 
-            var promptValue = DropDownPrompt.ShowDialog(superTagList, "Veuillez choisir le super tag puis entrer le nom du sous tag à créer", "Ajout d'un sous tag");
+            var promptValue = Prompt.ShowDropDownListDialog(superTagList, "Veuillez choisir le super tag puis entrer le nom du sous tag à créer", "Ajout d'un sous tag");
             if( promptValue.Item1 != "")
             { 
                 var superTag = mTagList.First(s => s.name == promptValue.Item1);
